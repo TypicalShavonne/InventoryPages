@@ -1,0 +1,8 @@
+name: InventoryPages
+version: '${project.version}'
+main: me.kevinnovak.inventorypages.InventoryPages
+api-version: '1.13'
+authors:
+  - KevinNovak
+  - Cortez_Romeo
+description: Add pages to inventories for expansive storage!
