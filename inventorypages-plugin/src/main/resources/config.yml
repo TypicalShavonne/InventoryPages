@@ -2,64 +2,6 @@
 # Created by KevinNovak
 
 # ============================================
-# Items
-# ============================================
-# ID
-#   Any item id (material)
-#   See https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html for a list
-#
-# position
-#   Inventory positions:
-#   ----------------------------------------------
-#   |  0 |  1 |  2 |  3 |  4 |  5 |  6 |  7 |  8 |
-#   ----------------------------------------------
-#   |  9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 |
-#   ----------------------------------------------
-#   | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 |
-#   ----------------------------------------------
-#   Hotbar: (Not usable)
-#   ----------------------------------------------
-#   |    |    |    |    |    |    |    |    |    |
-#   ----------------------------------------------
-#
-# name
-#   The item name
-#   Color codes are supported
-#     See http://minecraft.gamepedia.com/Formatting_codes for color codes
-#     Use the ampersand symbol "&" before the color code number
-#       Ex. "&6" would be gold.
-#
-# lore
-#   Item lore
-#   Color codes also apply here
-#   Place the variable "{CURRENT}" where you would like the current inventory page number
-#   Place the variable "{MAX}" where you would like the max inventory page number
-
-items:
-  # The previous page button item
-  prev:
-    id: CYAN_STAINED_GLASS_PANE
-    position: 18
-    name: '&6Prev Page'
-    lore:
-      - '&3Page {CURRENT}/{MAX}'
-
-  # The next page button item
-  next:
-    id: CYAN_STAINED_GLASS_PANE
-    position: 26
-    name: '&6Next Page'
-    lore:
-      - '&3Page {CURRENT}/{MAX}'
-
-  # The no page button item
-  noPage:
-    id: GRAY_STAINED_GLASS_PANE
-    name: '&6No Pages'
-    lore:
-      - '&3Page {CURRENT}/{MAX}'
-
-# ============================================
 # Commands
 # ============================================
 commands:

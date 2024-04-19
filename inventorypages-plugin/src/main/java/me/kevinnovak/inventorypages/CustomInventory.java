@@ -9,7 +9,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.AbstractMap;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +27,7 @@ public class CustomInventory {
     // ======================================
     // Constructor
     // ======================================
-    CustomInventory(InventoryPages plugin, Player player, int maxPage, ItemStack prevItem, Integer prevPos, ItemStack nextItem, Integer nextPos, ItemStack noPageItem, String itemsMerged, String itemsDropped) {
+    public CustomInventory(InventoryPages plugin, Player player, int maxPage, ItemStack prevItem, Integer prevPos, ItemStack nextItem, Integer nextPos, ItemStack noPageItem) {
         this.plugin = plugin;
         this.player = player;
         this.maxPage = maxPage;
@@ -51,7 +50,7 @@ public class CustomInventory {
         }
 
         String playerUUID = player.getUniqueId().toString();
-        File playerFile = new File(this.plugin.getDataFolder() + "/inventories/" + playerUUID.substring(0, 1) + "/" + playerUUID + ".yml");
+        File playerFile = new File(this.plugin.getDataFolder() + "/database/" + playerUUID.substring(0, 1) + "/" + playerUUID + ".yml");
         FileConfiguration playerData = YamlConfiguration.loadConfiguration(playerFile);
 
         if (playerFile.exists()) {
@@ -107,7 +106,7 @@ public class CustomInventory {
         Boolean storedItem = false;
         Boolean droppedItem = false;
         for (int i = 0; i < 27; i++) {
-            ItemStack item = player.getInventory().getItem(i + 9);
+            ItemStack item = InventoryPages.nms.getItemStack(player.getInventory().getItem(i + 9));
             if (item != null) {
                 if (this.storeOrDropItem(item, gm)) {
                     droppedItem = true;
@@ -118,10 +117,10 @@ public class CustomInventory {
         }
         if (playerFile.exists()) {
             if (storedItem) {
-                player.sendMessage(itemsMerged);
+                player.sendMessage("Items have been moved to your inventory pages");
             }
             if (droppedItem) {
-                player.sendMessage(itemsDropped);
+                player.sendMessage("Your inventory is full, some items have been dropped.");
             }
         }
 
@@ -131,18 +130,18 @@ public class CustomInventory {
     // ======================================
     // Save Current Page
     // ======================================
-    void saveCurrentPage() {
+    public void saveCurrentPage() {
         if (player.getGameMode() != GameMode.CREATIVE) {
             ArrayList<ItemStack> pageItems = new ArrayList<ItemStack>(25);
             for (int i = 0; i < 27; i++) {
                 if (i != prevPos && i != nextPos) {
-                    pageItems.add(this.player.getInventory().getItem(i + 9));
+                    pageItems.add(InventoryPages.nms.getItemStack(this.player.getInventory().getItem(i + 9)));
                 }
             }
             this.items.put(this.page, pageItems);
         } else {
             for (int i = 0; i < 27; i++) {
-                creativeItems.set(i, this.player.getInventory().getItem(i + 9));
+                creativeItems.set(i, InventoryPages.nms.getItemStack(this.player.getInventory().getItem(i + 9)));
             }
         }
     }
@@ -150,7 +149,7 @@ public class CustomInventory {
     // ======================================
     // Clear Page
     // ======================================
-    void clearPage(GameMode gm) {
+    public void clearPage(GameMode gm) {
         clearPage(this.page, gm);
     }
 
@@ -171,7 +170,7 @@ public class CustomInventory {
     // ======================================
     // Clear All Pages
     // ======================================
-    void clearAllPages(GameMode gm) {
+    public void clearAllPages(GameMode gm) {
         if (gm != GameMode.CREATIVE) {
             for (int i = 0; i < this.maxPage + 1; i++) {
                 clearPage(i, gm);
@@ -184,11 +183,11 @@ public class CustomInventory {
     // ======================================
     // Drop Page
     // ======================================
-    void dropPage(GameMode gm) {
+    public void dropPage(GameMode gm) {
         dropPage(this.page, gm);
     }
 
-    void dropPage(int page, GameMode gm) {
+    public void dropPage(int page, GameMode gm) {
         if (gm != GameMode.CREATIVE) {
             for (int i = 0; i < 25; i++) {
                 ItemStack item = this.items.get(page).get(i);
@@ -211,7 +210,7 @@ public class CustomInventory {
     // ======================================
     // Drop All Pages
     // ======================================
-    void dropAllPages(GameMode gm) {
+    public void dropAllPages(GameMode gm) {
         if (gm != GameMode.CREATIVE) {
             for (int i = 0; i < this.maxPage + 1; i++) {
                 dropPage(i, gm);
@@ -224,15 +223,15 @@ public class CustomInventory {
     // ======================================
     // Show Page
     // ======================================
-    void showPage() {
+    public void showPage() {
         this.showPage(this.page);
     }
 
-    void showPage(Integer page) {
+    public void showPage(Integer page) {
         showPage(page, GameMode.SURVIVAL);
     }
 
-    void showPage(GameMode gm) {
+    public void showPage(GameMode gm) {
         showPage(this.page, gm);
     }
 
@@ -301,7 +300,7 @@ public class CustomInventory {
     // ======================================
     // Previous Page
     // ======================================
-    void prevPage() {
+    public void prevPage() {
         if (this.page > 0) {
             this.saveCurrentPage();
             this.page = this.page - 1;
@@ -313,7 +312,7 @@ public class CustomInventory {
     // ======================================
     // Next Page
     // ======================================
-    void nextPage() {
+    public void nextPage() {
         if (this.page < maxPage) {
             this.saveCurrentPage();
             this.page = this.page + 1;
@@ -346,7 +345,7 @@ public class CustomInventory {
     // ======================================
     // Get/Set Items
     // ======================================
-    HashMap<Integer, ArrayList<ItemStack>> getItems() {
+    public HashMap<Integer, ArrayList<ItemStack>> getItems() {
         return this.items;
     }
 
@@ -357,7 +356,7 @@ public class CustomInventory {
     // ======================================
     // Get/Set Creative Items
     // ======================================
-    ArrayList<ItemStack> getCreativeItems() {
+    public ArrayList<ItemStack> getCreativeItems() {
         return this.creativeItems;
     }
 
@@ -368,7 +367,7 @@ public class CustomInventory {
     // ======================================
     // Get/Set Current Page
     // ======================================
-    Integer getPage() {
+    public Integer getPage() {
         return this.page;
     }
 
@@ -379,7 +378,7 @@ public class CustomInventory {
     // ======================================
     // Get/Set Has Used Creative Boolean
     // ======================================
-    Boolean hasUsedCreative() {
+    public Boolean hasUsedCreative() {
         return this.hasUsedCreative;
     }
 
