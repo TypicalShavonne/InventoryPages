@@ -28,14 +28,16 @@
 # ĐỌC KỸ TRƯỚC KHI CHỈNH FILE
 
 messages:
+  prefix: '&#03fc77InventoryPages&7Recoded '
   no-permission: '&cBạn không có quyền để xài lệnh này.'
+  reload: '&aReloaded InventoryPagesRecoded'
   clear: '&aXóa túi đồ trang hiện tại thành công &7(Sử dụng /clear all nếu muốn xóa ở tất cả trang).'
   clear-all: '&aXóa túi đồ ở tất cả trang thành công!'
   # Khi kho đồ cũ có quá nhiều để có thể fit kho đồ mới, item sẽ drop
   items-dropped: '&cQuá nhiều item! Một số item đã bị rớt ra trong quá trình chuyển đổi.'
   commands:
     inventorypages:
-      - '&#03fc77InventoryPages &7Recoded'
+      - '&#03fc77InventoryPages&7Recoded'
       - '&7Version %version%'
       - ' '
       - '&#03fc77/inventorypagesrecoded reload'

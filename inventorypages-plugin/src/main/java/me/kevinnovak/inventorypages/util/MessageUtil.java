@@ -1,7 +1,7 @@
 package me.kevinnovak.inventorypages.util;
 
 import me.kevinnovak.inventorypages.InventoryPages;
-import me.kevinnovak.inventorypages.file.inventory.MessageFile;
+import me.kevinnovak.inventorypages.file.MessageFile;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -31,12 +31,16 @@ public class MessageUtil {
         sender.sendMessage(InventoryPages.nms.addColor(message));
     }
 
+    public static void sendMessage(CommandSender sender, String message, boolean prefix) {
+        sender.sendMessage(InventoryPages.nms.addColor(MessageFile.get().getString("messages.prefix") + message));
+    }
+
     public static void sendMessage(Player player, String message) {
 
         if (player == null | message.equals(""))
             return;
 
-        message = MessageFile.get().getString("PREFIX") + message;
+        message = MessageFile.get().getString("messages.prefix") + message;
 
 /*        if (!InventoryPages.PAPISupport())
             player.sendMessage(InventoryPages.nms.addColor(message));

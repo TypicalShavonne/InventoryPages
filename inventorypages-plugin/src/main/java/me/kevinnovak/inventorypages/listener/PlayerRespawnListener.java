@@ -2,6 +2,7 @@ package me.kevinnovak.inventorypages.listener;
 
 import me.kevinnovak.inventorypages.InventoryPages;
 import me.kevinnovak.inventorypages.manager.DatabaseManager;
+import me.kevinnovak.inventorypages.manager.DebugManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -12,6 +13,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 public class PlayerRespawnListener implements Listener {
     public PlayerRespawnListener() {
         Bukkit.getPluginManager().registerEvents(this, InventoryPages.plugin);
+        DebugManager.debug("LOADING EVENTS", "Loaded PlayerRespawnEvent");
     }
 
     @EventHandler

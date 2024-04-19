@@ -41,6 +41,7 @@ public class DatabaseManager {
             DatabaseManager.playerInvs.put(playerUUID, inventory);
             addCrashedPlayer(player);
             DatabaseManager.playerInvs.get(playerUUID).showPage(player.getGameMode());
+            DebugManager.debug("LOADING INV. FROM FILE TO HASHMAP PLAYER (" + player.getName() + ")", "Completed with no issues.");
         }
     }
 
@@ -53,6 +54,7 @@ public class DatabaseManager {
                     saveInvFromHashMapToFile(player);
                 }
             }
+            DebugManager.debug("UPDATING AND SAVING ALL INVENTORIES", "Completed with no issues.");
         }
     }
 
@@ -64,6 +66,7 @@ public class DatabaseManager {
                 }
                 crashedData.set("crashed." + player.getUniqueId().toString(), null);
                 saveCrashedFile();
+                DebugManager.debug("CLEARING CRASHED PLAYER (" + player.getName() + ")", "Completed with no issues.");
             }
         }
     }
@@ -105,6 +108,7 @@ public class DatabaseManager {
 
             try {
                 playerData.save(playerFile);
+                DebugManager.debug("SAVING INV. FROM HASHMAP TO FILE PLAYER (" + player.getName() + ")", "Completed with no issues.");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -118,6 +122,8 @@ public class DatabaseManager {
         String playerUUID = player.getUniqueId().toString();
         if (DatabaseManager.playerInvs.containsKey(playerUUID)) {
             DatabaseManager.playerInvs.get(playerUUID).saveCurrentPage();
+            DebugManager.debug("UPDATING INV. TO HASHMAP PLAYER (" + player.getName() + ")", "Completed with no issues.");
+
         }
     }
 
@@ -129,6 +135,7 @@ public class DatabaseManager {
         if (DatabaseManager.playerInvs.containsKey(playerUUID)) {
             DatabaseManager.playerInvs.remove(playerUUID);
             clearAndRemoveCrashedPlayer(player);
+            DebugManager.debug("REMOVING INV. TO HASHMAP PLAYER (" + player.getName() + ")", "Completed with no issues.");
         }
     }
 
@@ -138,6 +145,7 @@ public class DatabaseManager {
     public static void saveCrashedFile() {
         try {
             crashedData.save(crashedFile);
+            DebugManager.debug("SAVING CRASHED FILE", "Completed with no issues.");
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -149,7 +157,7 @@ public class DatabaseManager {
     // ======================================
     public static Boolean crashedPlayersExist() {
         if (crashedData.contains("crashed")) {
-            if (crashedData.getConfigurationSection("crashed").getKeys(false).size() > 0) {
+            if (!crashedData.getConfigurationSection("crashed").getKeys(false).isEmpty()) {
                 return true;
             }
         }
@@ -172,6 +180,7 @@ public class DatabaseManager {
     public static void addCrashedPlayer(Player player) {
         crashedData.set("crashed." + player.getUniqueId().toString(), true);
         saveCrashedFile();
+        DebugManager.debug("ADDING CRASHED FILE PLAYER (" + player.getName() + ")", "Completed with no issues.");
     }
 
 }

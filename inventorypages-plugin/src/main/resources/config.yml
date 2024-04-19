@@ -18,8 +18,33 @@
 # --- discord: Cortez_Romeo
 # --- facebook: https://www.facebook.com/thuong.trinh.nguyen.321/
 
+# Dùng chủ yếu cho việc sửa lỗi, khi bật sẽ hiện log những hành động đã được thực thi trên console
+debug:
+  enabled: false
+  prefix: '&e[InventoryPagesRecoded Debug] '
+
+# Dùng để thống kê số lượng người chơi sử dụng plugin này
+# Không ảnh hưởng đến hiệu năng máy chủ
+bStats:
+  enabled: true
+
 # Tự động lưu
-saving:
+auto-saving:
   enabled: true
   # Bao lâu thì lưu một lần, tính theo giây
   interval: 900
+
+# Kiểu dữ liệu để hệ thống dựa vào đó mà quản lý
+# Hiện tại mình chỉ làm 2 kiểu dữ liệu, bao gồm:
+#   * MYSQL (BETA)
+#       mysql là kiểu dữ liệu cho phép bạn quản lý dữ liệu trên nhiều nền
+#       tảng khác nhau, với lựa chọn này, người chơi có thể kết nối tới
+#       túi đồ ở nhiều máy chủ khác nhau, dữ liệu này vẫn đang trong giai đoạn
+#       thử nghiệm nên có thể gây lỗi, vui lòng cân nhắc trước khi sử dụng!
+#   * YAML (Khuyến khíchh nên xài)
+#       lưu và quản lý trực tiếp dữ liệu vào file, khuyến khích nên xài nếu
+#       bạn dùng plugin này để quản lý túi đồ người chơi cho một máy chủ
+#       duy nhất
+database:
+  # MYSQL, YAML
+  type: YAML

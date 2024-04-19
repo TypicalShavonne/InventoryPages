@@ -1,4 +1,4 @@
-package me.kevinnovak.inventorypages.file.inventory;
+package me.kevinnovak.inventorypages.file;
 
 import me.kevinnovak.inventorypages.InventoryPages;
 import org.bukkit.configuration.file.FileConfiguration;

@@ -2,6 +2,7 @@ package me.kevinnovak.inventorypages.listener;
 
 import me.kevinnovak.inventorypages.InventoryPages;
 import me.kevinnovak.inventorypages.manager.DatabaseManager;
+import me.kevinnovak.inventorypages.manager.DebugManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,6 +12,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class PlayerQuitListener implements Listener {
     public PlayerQuitListener() {
         Bukkit.getPluginManager().registerEvents(this, InventoryPages.plugin);
+        DebugManager.debug("LOADING EVENTS", "Loaded PlayerQuitEvent");
     }
 
     @EventHandler

@@ -1,6 +1,6 @@
 package me.kevinnovak.inventorypages;
 
-import me.kevinnovak.inventorypages.file.inventory.MessageFile;
+import me.kevinnovak.inventorypages.file.MessageFile;
 import me.kevinnovak.inventorypages.util.MessageUtil;
 import org.bukkit.GameMode;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -22,7 +22,7 @@ public class CustomInventory {
     private ItemStack prevItem, nextItem, noPageItem;
     private Integer page = 0, maxPage = 1, prevPos, nextPos;
     private Boolean hasUsedCreative = false;
-    private HashMap<Integer, ArrayList<ItemStack>> items = new HashMap<Integer, ArrayList<ItemStack>>();
+    private HashMap<Integer, ArrayList<ItemStack>> items = new HashMap<>();
     ;
     private ArrayList<ItemStack> creativeItems = new ArrayList<ItemStack>(27);
 
@@ -57,17 +57,18 @@ public class CustomInventory {
 
         if (playerFile.exists()) {
             // load survival items
-            HashMap<Integer, ArrayList<ItemStack>> pageItemHashMap = new HashMap<Integer, ArrayList<ItemStack>>();
+            HashMap<Integer, ArrayList<ItemStack>> pageItemHashMap = new HashMap<>();
 
-            for (int i = 0; i < maxPage + 1; i++) {
+            for (int page = 0; page < maxPage + 1; page++) {
                 //Bukkit.getLogger().info("Loading " + playerUUID + "'s Page: " + i);
-                ArrayList<ItemStack> pageItems = new ArrayList<ItemStack>(25);
-                for (int j = 0; j < 25; j++) {
+                // số item sẽ có trong trang %page%
+                ArrayList<ItemStack> pageItems = new ArrayList<>(25);
+                for (int slotNumber = 0; slotNumber < 25; slotNumber++) {
                     ItemStack item = null;
-                    if (playerData.contains("items.main." + i + "." + j)) {
-                        if (playerData.getString("items.main." + i + "." + j) != null) {
+                    if (playerData.contains("items.main." + page + "." + slotNumber)) {
+                        if (playerData.getString("items.main." + page + "." + slotNumber) != null) {
                             try {
-                                item = InventoryStringDeSerializer.stacksFromBase64(playerData.getString("items.main." + i + "." + j))[0];
+                                item = InventoryStringDeSerializer.stacksFromBase64(playerData.getString("items.main." + page + "." + slotNumber))[0];
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -75,7 +76,8 @@ public class CustomInventory {
                     }
                     pageItems.add(item);
                 }
-                pageItemHashMap.put(i, pageItems);
+                // add item vào page %page%
+                pageItemHashMap.put(page, pageItems);
             }
 
             this.setItems(pageItemHashMap);
@@ -104,16 +106,13 @@ public class CustomInventory {
         }
 
         GameMode gm = player.getGameMode();
-
-        Boolean storedItem = false;
+        
         Boolean droppedItem = false;
         for (int i = 0; i < 27; i++) {
             ItemStack item = InventoryPages.nms.getItemStack(player.getInventory().getItem(i + 9));
             if (item != null) {
                 if (this.storeOrDropItem(item, gm)) {
                     droppedItem = true;
-                } else {
-                    storedItem = true;
                 }
             }
         }
@@ -152,7 +151,7 @@ public class CustomInventory {
 
     void clearPage(int page, GameMode gm) {
         if (gm != GameMode.CREATIVE) {
-            ArrayList<ItemStack> pageItems = new ArrayList<ItemStack>(25);
+            ArrayList<ItemStack> pageItems = new ArrayList<>(25);
             for (int i = 0; i < 25; i++) {
                 pageItems.add(null);
             }
@@ -232,30 +231,32 @@ public class CustomInventory {
         showPage(this.page, gm);
     }
 
-    void showPage(Integer page, GameMode gm) {
+    void showPage(Integer page, GameMode gameMode) {
         if (page > maxPage) {
             this.page = maxPage;
         } else {
             this.page = page;
         }
         //player.sendMessage("GameMode: " + gm);
-        if (gm != GameMode.CREATIVE) {
+        if (gameMode != GameMode.CREATIVE) {
             Boolean foundPrev = false;
             Boolean foundNext = false;
-            for (int i = 0; i < 27; i++) {
-                int j = i;
-                if (i == prevPos) {
+            for (int slotNumber = 0; slotNumber < 27; slotNumber++) {
+                int j = slotNumber;
+                // slot number là vị trí của nút "trở về", tiến hành set nút "trang trước"
+                if (slotNumber == prevPos) {
                     if (this.page == 0) {
-                        this.player.getInventory().setItem(i + 9, addPageNums(noPageItem));
+                        this.player.getInventory().setItem(slotNumber + 9, addPageNumber(noPageItem));
                     } else {
-                        this.player.getInventory().setItem(i + 9, addPageNums(prevItem));
+                        this.player.getInventory().setItem(slotNumber + 9, addPageNumber(prevItem));
                     }
                     foundPrev = true;
-                } else if (i == nextPos) {
+
+                } else if (slotNumber == nextPos) { // lần này slot number là vị trí của nút "trang sau"
                     if (this.page == maxPage) {
-                        this.player.getInventory().setItem(i + 9, addPageNums(noPageItem));
+                        this.player.getInventory().setItem(slotNumber + 9, addPageNumber(noPageItem));
                     } else {
-                        this.player.getInventory().setItem(i + 9, addPageNums(nextItem));
+                        this.player.getInventory().setItem(slotNumber + 9, addPageNumber(nextItem));
                     }
                     foundNext = true;
                 } else {
@@ -265,11 +266,11 @@ public class CustomInventory {
                     if (foundNext) {
                         j--;
                     }
-                    this.player.getInventory().setItem(i + 9, this.items.get(this.page).get(j));
+                    this.player.getInventory().setItem(slotNumber + 9, this.items.get(this.page).get(j));
                 }
             }
             //player.sendMessage("Showing Page: " + this.page);
-        } else {
+        } else { // đối với chế độ sáng tạo
             this.hasUsedCreative = true;
             for (int i = 0; i < 27; i++) {
                 this.player.getInventory().setItem(i + 9, this.creativeItems.get(i));
@@ -280,7 +281,7 @@ public class CustomInventory {
     // ======================================
     // Add Page Numbers
     // ======================================
-    ItemStack addPageNums(ItemStack item) {
+    ItemStack addPageNumber(ItemStack item) {
         ItemStack modItem = new ItemStack(item);
         ItemMeta itemMeta = modItem.getItemMeta();
         List<String> itemLore = itemMeta.getLore();

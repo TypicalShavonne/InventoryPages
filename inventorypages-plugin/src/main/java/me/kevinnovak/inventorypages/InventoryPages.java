@@ -2,18 +2,18 @@
 
 import com.tchristofferson.configupdater.ConfigUpdater;
 import me.kevinnovak.inventorypages.command.ClearCommand;
-import me.kevinnovak.inventorypages.file.inventory.MessageFile;
+import me.kevinnovak.inventorypages.file.MessageFile;
 import me.kevinnovak.inventorypages.file.inventory.PlayerInventoryFile;
 import me.kevinnovak.inventorypages.inventory.PlayerPageInventory;
 import me.kevinnovak.inventorypages.listener.*;
+import me.kevinnovak.inventorypages.manager.AutoSaveManager;
 import me.kevinnovak.inventorypages.manager.DatabaseManager;
+import me.kevinnovak.inventorypages.manager.DebugManager;
 import me.kevinnovak.inventorypages.server.VersionSupport;
 import me.kevinnovak.support.version.cross.CrossVersionSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,9 +33,12 @@ public static InventoryPages plugin;
 
         //
         initFiles();
+        DebugManager.setDebug(getConfig().getBoolean("debug"));
         initInventories();
         initCommands();
         initListeners();
+
+        AutoSaveManager.startAutoSave(getConfig().getInt("auto-saving.interval"));
         //
 
         // load all online players into hashmap
@@ -47,26 +50,6 @@ public static InventoryPages plugin;
                 e.printStackTrace();
             }
         }
-        if (getConfig().getBoolean("saving.enabled")) {
-            Bukkit.getServer().getLogger().info("[InventoryPages] Setting up inventory saving.");
-            startSaving();
-        }
-
-        Bukkit.getServer().getLogger().info("[InventoryPages] Plugin enabled!");
-    }
-
-    @Override
-    public void onDisable() {
-        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-            String playerUUID = player.getUniqueId().toString();
-            if (DatabaseManager.playerInvs.containsKey(playerUUID)) {
-                // update inventories to hashmap and save to file
-                DatabaseManager.updateInvToHashMap(player);
-                DatabaseManager.saveInvFromHashMapToFile(player);
-                DatabaseManager.clearAndRemoveCrashedPlayer(player);
-            }
-        }
-        Bukkit.getServer().getLogger().info("[InventoryPages] Plugin disabled.");
     }
 
     public void initFiles() {
@@ -83,6 +66,7 @@ public static InventoryPages plugin;
             e.printStackTrace();
         }
         reloadConfig();
+        DebugManager.debug("LOADING FILE", "Loaded config.yml");
 
         // message.yml
         String messageFileName = "message.yml";
@@ -95,6 +79,7 @@ public static InventoryPages plugin;
             e.printStackTrace();
         }
         MessageFile.reload();
+        DebugManager.debug("LOADING FILE", "Loaded message.yml");
 
         // inventories/playerinventory.yml
         String inventoryFileName = "playerinventory.yml";
@@ -107,6 +92,7 @@ public static InventoryPages plugin;
             e.printStackTrace();
         }
         PlayerInventoryFile.reload();
+        DebugManager.debug("LOADING FILE", "Loaded playerinventory.yml");
     }
 
     public void initInventories() {
@@ -126,14 +112,18 @@ public static InventoryPages plugin;
         new PlayerRespawnListener();
     }
 
-    public void startSaving() {
-        BukkitScheduler scheduler = getServer().getScheduler();
-        scheduler.scheduleSyncRepeatingTask(this, new Runnable() {
-            @Override
-            public void run() {
-                DatabaseManager.updateAndSaveAllInventoriesToFiles();
+    @Override
+    public void onDisable() {
+        for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+            String playerUUID = player.getUniqueId().toString();
+            if (DatabaseManager.playerInvs.containsKey(playerUUID)) {
+                // update inventories to hashmap and save to file
+                DatabaseManager.updateInvToHashMap(player);
+                DatabaseManager.saveInvFromHashMapToFile(player);
+                DatabaseManager.clearAndRemoveCrashedPlayer(player);
             }
-        }, 0L, 20L * getConfig().getInt("saving.interval"));
+        }
+        Bukkit.getServer().getLogger().info("[InventoryPages] Plugin disabled.");
     }
 
 }

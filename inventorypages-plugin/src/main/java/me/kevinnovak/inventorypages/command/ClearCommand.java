@@ -1,10 +1,10 @@
 package me.kevinnovak.inventorypages.command;
 
 import me.kevinnovak.inventorypages.InventoryPages;
-import me.kevinnovak.inventorypages.file.inventory.MessageFile;
+import me.kevinnovak.inventorypages.file.MessageFile;
 import me.kevinnovak.inventorypages.manager.DatabaseManager;
+import me.kevinnovak.inventorypages.manager.DebugManager;
 import me.kevinnovak.inventorypages.util.MessageUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 public class ClearCommand implements CommandExecutor {
     public ClearCommand() {
         InventoryPages.plugin.getCommand("clear").setExecutor(this);
+        DebugManager.debug("LOADING COMMAND", "Loaded ClearCommand");
     }
 
     @Override
@@ -23,7 +24,7 @@ public class ClearCommand implements CommandExecutor {
             Player player = (Player) sender;
 
             if (!player.hasPermission("inventorypages.clear")) {
-                MessageUtil.sendMessage(player, MessageFile.get().getString("messages.no-permission"));
+                MessageUtil.sendMessage(player, MessageFile.get().getString("messages.no-permission"), true);
                 return false;
             }
 

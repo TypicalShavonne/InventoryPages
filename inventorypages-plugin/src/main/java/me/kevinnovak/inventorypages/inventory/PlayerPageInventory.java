@@ -1,6 +1,7 @@
 package me.kevinnovak.inventorypages.inventory;
 
 import me.kevinnovak.inventorypages.file.inventory.PlayerInventoryFile;
+import me.kevinnovak.inventorypages.manager.DebugManager;
 import me.kevinnovak.inventorypages.util.ItemUtil;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -31,6 +32,7 @@ public class PlayerPageInventory {
                 (short) playerInvCfg.getInt("items.noPage.data"),
                 playerInvCfg.getString("items.noPage.name"),
                 playerInvCfg.getStringList("items.noPage.lore"));
+        DebugManager.debug("LOADING INVENTORIES (PlayerPageInventory)", "Completed with no issues.");
     }
 
 }

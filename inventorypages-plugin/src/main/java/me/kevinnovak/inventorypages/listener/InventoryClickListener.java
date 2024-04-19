@@ -3,6 +3,7 @@ package me.kevinnovak.inventorypages.listener;
 import me.kevinnovak.inventorypages.InventoryPages;
 import me.kevinnovak.inventorypages.inventory.PlayerPageInventory;
 import me.kevinnovak.inventorypages.manager.DatabaseManager;
+import me.kevinnovak.inventorypages.manager.DebugManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -18,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 public class InventoryClickListener implements Listener {
     public InventoryClickListener() {
         Bukkit.getPluginManager().registerEvents(this, InventoryPages.plugin);
+        DebugManager.debug("LOADING EVENTS", "Loaded InventoryClickEvent");
     }
 
     @EventHandler
