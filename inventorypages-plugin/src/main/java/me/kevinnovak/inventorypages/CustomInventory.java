@@ -1,5 +1,7 @@
 package me.kevinnovak.inventorypages;
 
+import me.kevinnovak.inventorypages.file.inventory.MessageFile;
+import me.kevinnovak.inventorypages.util.MessageUtil;
 import org.bukkit.GameMode;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -115,14 +117,9 @@ public class CustomInventory {
                 }
             }
         }
-        if (playerFile.exists()) {
-            if (storedItem) {
-                player.sendMessage("Items have been moved to your inventory pages");
-            }
-            if (droppedItem) {
-                player.sendMessage("Your inventory is full, some items have been dropped.");
-            }
-        }
+        if (playerFile.exists())
+            if (droppedItem)
+                MessageUtil.sendMessage(player, MessageFile.get().getString("messages.items-dropped"));
 
         //player.sendMessage("Your max pages are: " + (maxPage + 1));
     }

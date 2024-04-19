@@ -1,51 +1,25 @@
-# Configuration file for InventoryPages
-# Created by KevinNovak
+#
+#  ___                                  _                            ____
+# |_ _|  _ __   __   __   ___   _ __   | |_    ___    _ __   _   _  |  _ \    __ _    __ _    ___   ___
+#  | |  | '_ \  \ \ / /  / _ \ | '_ \  | __|  / _ \  | '__| | | | | | |_) |  / _` |  / _` |  / _ \ / __|
+#  | |  | | | |  \ V /  |  __/ | | | | | |_  | (_) | | |    | |_| | |  __/  | (_| | | (_| | |  __/ \__ \
+# |___| |_| |_|   \_/    \___| |_| |_|  \__|  \___/  |_|     \__, | |_|      \__,_|  \__, |  \___| |___/
+#                                                            |___/                   |___/
+#  ____                              _              _
+# |  _ \    ___    ___    ___     __| |   ___    __| |
+# | |_) |  / _ \  / __|  / _ \   / _` |  / _ \  / _` |
+# |  _ <  |  __/ | (__  | (_) | | (_| | |  __/ | (_| |
+# |_| \_\  \___|  \___|  \___/   \__,_|  \___|  \__,_|
+#
+#  Author: KevinNovak, Cortez_Romeo
+#  Download plugin này miễn phí tại: https://minecraftvn.net
+#
+# Góp ý báo lỗi tại
+# --- discord: Cortez_Romeo
+# --- facebook: https://www.facebook.com/thuong.trinh.nguyen.321/
 
-# ============================================
-# Commands
-# ============================================
-commands:
-  # Clears the current page and hotbar
-  #   Add "all" after a clear command to clear all pages and hotbar
-  clear:
-    # Will override any existing commands with same name
-    aliases:
-      - 'clear'
-      - 'clearinventory'
-      - 'clearinvent'
-      - 'ci'
-      - 'clean'
-
-# ============================================
-# Saving
-# ============================================
+# Tự động lưu
 saving:
-  # Recommended to keep enabled
-  #   If disabled, inventories are only saved when players leave the server
   enabled: true
-  # How often should inventories be saved to files, in seconds
+  # Bao lâu thì lưu một lần, tính theo giây
   interval: 900
-
-# ============================================
-# Logging
-# ============================================
-logging:
-  saves:
-    # Show in the console when inventories are saved
-    enabled: true
-    # Message to be shown in the console
-    message: 'All inventories have been saved.'
-
-# ============================================
-# Language
-# ============================================
-# Color codes are supported
-#   See http://minecraft.gamepedia.com/Formatting_codes for color codes
-#   Use the ampersand symbol "&" before the color code number
-#     Ex. "&6" would be gold.
-language:
-  noPermission: '&4You do not have access to that command.'
-  clear: '&6Cleared inventory items from hotbar and current page.'
-  clearAll: '&6Cleared inventory items from hotbar and all pages.'
-  itemsMerged: '&7Items have been moved to your inventory pages.'
-  itemsDropped: '&cYour inventory is full, some items have been dropped.'

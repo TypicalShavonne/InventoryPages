@@ -1,7 +1,9 @@
 package me.kevinnovak.inventorypages.command;
 
 import me.kevinnovak.inventorypages.InventoryPages;
+import me.kevinnovak.inventorypages.file.inventory.MessageFile;
 import me.kevinnovak.inventorypages.manager.DatabaseManager;
+import me.kevinnovak.inventorypages.util.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
@@ -13,14 +15,15 @@ public class ClearCommand implements CommandExecutor {
     public ClearCommand() {
         InventoryPages.plugin.getCommand("clear").setExecutor(this);
     }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if (sender instanceof Player) {
             Player player = (Player) sender;
 
-            if (player.hasPermission("inventorypages.clear")) {
-                player.sendMessage("no permission");
+            if (!player.hasPermission("inventorypages.clear")) {
+                MessageUtil.sendMessage(player, MessageFile.get().getString("messages.no-permission"));
                 return false;
             }
 
@@ -30,11 +33,11 @@ public class ClearCommand implements CommandExecutor {
             if (args.length == 1) {
                 if (args[0].equalsIgnoreCase("all")) {
                     DatabaseManager.playerInvs.get(playerUUID).clearAllPages(gm);
-                    player.sendMessage("clear all");
+                    MessageUtil.sendMessage(player, MessageFile.get().getString("messages.clear-all"));
                 }
             } else {
                 DatabaseManager.playerInvs.get(playerUUID).clearPage(gm);
-                player.sendMessage("clear");
+                MessageUtil.sendMessage(player, MessageFile.get().getString("messages.clear"));
             }
             clearHotbar(player);
             DatabaseManager.playerInvs.get(playerUUID).showPage(gm);

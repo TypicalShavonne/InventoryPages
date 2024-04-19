@@ -9,3 +9,6 @@ description: Add pages to inventories for expansive storage!
 commands:
   clear:
     description: Clear inventory
+    aliases:
+      - clearinventory
+      - ci
