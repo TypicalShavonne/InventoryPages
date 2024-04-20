@@ -3,14 +3,10 @@ package me.kevinnovak.inventorypages;
 import me.kevinnovak.inventorypages.file.MessageFile;
 import me.kevinnovak.inventorypages.util.MessageUtil;
 import org.bukkit.GameMode;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,16 +16,19 @@ public class CustomInventory {
     public InventoryPages plugin;
     private Player player;
     private ItemStack prevItem, nextItem, noPageItem;
-    private Integer page = 0, maxPage = 1, prevPos, nextPos;
+    private int page = 0, maxPage = InventoryPages.plugin.getConfig().getInt("inventory-settings.max-page-default"), prevPos, nextPos;
     private Boolean hasUsedCreative = false;
     private HashMap<Integer, ArrayList<ItemStack>> items = new HashMap<>();
     ;
-    private ArrayList<ItemStack> creativeItems = new ArrayList<ItemStack>(27);
+    private ArrayList<ItemStack> creativeItems = new ArrayList<>(27);
 
     // ======================================
     // Constructor
     // ======================================
-    public CustomInventory(InventoryPages plugin, Player player, int maxPage, ItemStack prevItem, Integer prevPos, ItemStack nextItem, Integer nextPos, ItemStack noPageItem) {
+    public CustomInventory(InventoryPages plugin, Player player, HashMap<Integer, ArrayList<ItemStack>> pageItemHashMap, ArrayList<ItemStack> creativeItems, int maxPage, ItemStack prevItem, Integer prevPos, ItemStack nextItem, Integer nextPos, ItemStack noPageItem) {
+        if (maxPage < 0)
+            maxPage = 0;
+
         this.plugin = plugin;
         this.player = player;
         this.maxPage = maxPage;
@@ -39,6 +38,15 @@ public class CustomInventory {
         this.nextPos = nextPos;
         this.noPageItem = noPageItem;
 
+        // initialize creative inventory if it's empty
+        if (creativeItems.isEmpty())
+            for (int i = 0; i < 27; i++) {
+                creativeItems.add(null);
+            }
+
+        this.setItems(pageItemHashMap);
+        this.setCreativeItems(creativeItems);
+
         // create pages
         for (int i = 0; i < maxPage + 1; i++) {
             if (!pageExists(i)) {
@@ -46,68 +54,9 @@ public class CustomInventory {
             }
         }
 
-        // initialize creative inventory
-        for (int i = 0; i < 27; i++) {
-            creativeItems.add(null);
-        }
-
-        String playerUUID = player.getUniqueId().toString();
-        File playerFile = new File(this.plugin.getDataFolder() + "/database/" + playerUUID.substring(0, 1) + "/" + playerUUID + ".yml");
-        FileConfiguration playerData = YamlConfiguration.loadConfiguration(playerFile);
-
-        if (playerFile.exists()) {
-            // load survival items
-            HashMap<Integer, ArrayList<ItemStack>> pageItemHashMap = new HashMap<>();
-
-            for (int page = 0; page < maxPage + 1; page++) {
-                //Bukkit.getLogger().info("Loading " + playerUUID + "'s Page: " + i);
-                // số item sẽ có trong trang %page%
-                ArrayList<ItemStack> pageItems = new ArrayList<>(25);
-                for (int slotNumber = 0; slotNumber < 25; slotNumber++) {
-                    ItemStack item = null;
-                    if (playerData.contains("items.main." + page + "." + slotNumber)) {
-                        if (playerData.getString("items.main." + page + "." + slotNumber) != null) {
-                            try {
-                                item = InventoryStringDeSerializer.stacksFromBase64(playerData.getString("items.main." + page + "." + slotNumber))[0];
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                    pageItems.add(item);
-                }
-                // add item vào page %page%
-                pageItemHashMap.put(page, pageItems);
-            }
-
-            this.setItems(pageItemHashMap);
-
-            // load creative items
-            if (playerData.contains("items.creative.0")) {
-                ArrayList<ItemStack> creativeItems = new ArrayList<ItemStack>(27);
-                for (int i = 0; i < 27; i++) {
-                    ItemStack item = null;
-                    if (playerData.contains("items.creative.0." + i)) {
-                        try {
-                            item = InventoryStringDeSerializer.stacksFromBase64(playerData.getString("items.creative.0." + i))[0];
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    creativeItems.add(item);
-                }
-                this.setCreativeItems(creativeItems);
-            }
-
-            // load page
-            if (playerData.contains("page")) {
-                this.setPage(playerData.getInt("page"));
-            }
-        }
-
         GameMode gm = player.getGameMode();
         
-        Boolean droppedItem = false;
+        boolean droppedItem = false;
         for (int i = 0; i < 27; i++) {
             ItemStack item = InventoryPages.nms.getItemStack(player.getInventory().getItem(i + 9));
             if (item != null) {
@@ -116,16 +65,42 @@ public class CustomInventory {
                 }
             }
         }
-        if (playerFile.exists())
-            if (droppedItem)
-                MessageUtil.sendMessage(player, MessageFile.get().getString("messages.items-dropped"));
+        if (droppedItem)
+            MessageUtil.sendMessage(player, MessageFile.get().getString("messages.items-dropped"));
 
         //player.sendMessage("Your max pages are: " + (maxPage + 1));
     }
 
-    // ======================================
-    // Save Current Page
-    // ======================================
+    public int getMaxPage() {
+        return this.maxPage;
+    }
+
+    public void setMaxPage(int number) {
+        if (number < 0) {
+            this.maxPage = 0;
+            return;
+        }
+
+        this.maxPage = number;
+        showPage(player.getGameMode());
+    }
+
+    public void addMaxPage(int number) {
+        if (number < 0)
+            return;
+        this.maxPage = this.maxPage + number;
+        showPage(player.getGameMode());
+    }
+
+    public void removeMaxPage(int number) {
+        if (this.maxPage - number < 0) {
+            this.maxPage = 0;
+            return;
+        }
+        this.maxPage = this.maxPage - number;
+        showPage(player.getGameMode());
+    }
+
     public void saveCurrentPage() {
         if (player.getGameMode() != GameMode.CREATIVE) {
             ArrayList<ItemStack> pageItems = new ArrayList<ItemStack>(25);
@@ -142,9 +117,6 @@ public class CustomInventory {
         }
     }
 
-    // ======================================
-    // Clear Page
-    // ======================================
     public void clearPage(GameMode gm) {
         clearPage(this.page, gm);
     }
@@ -163,9 +135,6 @@ public class CustomInventory {
         }
     }
 
-    // ======================================
-    // Clear All Pages
-    // ======================================
     public void clearAllPages(GameMode gm) {
         if (gm != GameMode.CREATIVE) {
             for (int i = 0; i < this.maxPage + 1; i++) {
@@ -176,9 +145,6 @@ public class CustomInventory {
         }
     }
 
-    // ======================================
-    // Drop Page
-    // ======================================
     public void dropPage(GameMode gm) {
         dropPage(this.page, gm);
     }
@@ -242,7 +208,7 @@ public class CustomInventory {
             Boolean foundPrev = false;
             Boolean foundNext = false;
             for (int slotNumber = 0; slotNumber < 27; slotNumber++) {
-                int j = slotNumber;
+                int slotNumberClone = slotNumber;
                 // slot number là vị trí của nút "trở về", tiến hành set nút "trang trước"
                 if (slotNumber == prevPos) {
                     if (this.page == 0) {
@@ -261,19 +227,22 @@ public class CustomInventory {
                     foundNext = true;
                 } else {
                     if (foundPrev) {
-                        j--;
+                        slotNumberClone--;
                     }
                     if (foundNext) {
-                        j--;
+                        slotNumberClone--;
                     }
-                    this.player.getInventory().setItem(slotNumber + 9, this.items.get(this.page).get(j));
+                    // check một lần nữa cho make sure
+                    if (!pageExists(this.page))
+                        createPage(this.page);
+                    this.player.getInventory().setItem(slotNumber + 9, InventoryPages.nms.getItemStack(this.items.get(this.page).get(slotNumberClone)));
                 }
             }
             //player.sendMessage("Showing Page: " + this.page);
         } else { // đối với chế độ sáng tạo
             this.hasUsedCreative = true;
             for (int i = 0; i < 27; i++) {
-                this.player.getInventory().setItem(i + 9, this.creativeItems.get(i));
+                this.player.getInventory().setItem(i + 9, InventoryPages.nms.getItemStack(this.creativeItems.get(i)));
             }
         }
     }
@@ -348,6 +317,12 @@ public class CustomInventory {
     }
 
     void setItems(HashMap<Integer, ArrayList<ItemStack>> items) {
+        for (Integer page : items.keySet()) {
+            if (items.get(page) == null || items.get(page).isEmpty()) {
+                for (int i = 0; i <= 25; i++)
+                    items.put(0, null);
+            }
+        }
         this.items = items;
     }
 

@@ -48,3 +48,8 @@ auto-saving:
 database:
   # MYSQL, YAML
   type: YAML
+
+inventory-settings:
+  # Để là 0 nếu không muốn cho người chơi bất kì trang nào
+  # Không thể để số thấp hơn 0. Nếu để số thấp hơn 0, sẽ tự động coi là 0
+  max-page-default: 0

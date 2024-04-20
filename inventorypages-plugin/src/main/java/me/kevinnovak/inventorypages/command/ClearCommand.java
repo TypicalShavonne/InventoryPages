@@ -9,9 +9,15 @@ import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 
-public class ClearCommand implements CommandExecutor {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class ClearCommand implements CommandExecutor, TabExecutor {
     public ClearCommand() {
         InventoryPages.plugin.getCommand("clear").setExecutor(this);
         DebugManager.debug("LOADING COMMAND", "Loaded ClearCommand");
@@ -24,7 +30,7 @@ public class ClearCommand implements CommandExecutor {
             Player player = (Player) sender;
 
             if (!player.hasPermission("inventorypages.clear")) {
-                MessageUtil.sendMessage(player, MessageFile.get().getString("messages.no-permission"), true);
+                MessageUtil.sendMessage(player, MessageFile.get().getString("messages.no-permission"));
                 return false;
             }
 
@@ -33,15 +39,15 @@ public class ClearCommand implements CommandExecutor {
 
             if (args.length == 1) {
                 if (args[0].equalsIgnoreCase("all")) {
-                    DatabaseManager.playerInvs.get(playerUUID).clearAllPages(gm);
+                    DatabaseManager.playerInvs.get(playerUUID).getCustomInventory().clearAllPages(gm);
                     MessageUtil.sendMessage(player, MessageFile.get().getString("messages.clear-all"));
                 }
             } else {
-                DatabaseManager.playerInvs.get(playerUUID).clearPage(gm);
+                DatabaseManager.playerInvs.get(playerUUID).getCustomInventory().clearPage(gm);
                 MessageUtil.sendMessage(player, MessageFile.get().getString("messages.clear"));
             }
             clearHotbar(player);
-            DatabaseManager.playerInvs.get(playerUUID).showPage(gm);
+            DatabaseManager.playerInvs.get(playerUUID).getCustomInventory().showPage(gm);
         }
 
         return false;
@@ -51,5 +57,20 @@ public class ClearCommand implements CommandExecutor {
         for (int i = 0; i < 9; i++) {
             player.getInventory().setItem(i, null);
         }
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+        List<String> completions = new ArrayList<>();
+        List<String> commands = new ArrayList<>();
+
+        if (args.length == 1) {
+            if (sender.hasPermission("inventorypages.clear")) {
+                commands.add("all");
+            }
+            StringUtil.copyPartialMatches(args[0], commands, completions);
+        }
+        Collections.sort(completions);
+        return completions;
     }
 }

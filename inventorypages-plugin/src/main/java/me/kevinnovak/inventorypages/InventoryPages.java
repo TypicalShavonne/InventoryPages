@@ -2,6 +2,8 @@
 
 import com.tchristofferson.configupdater.ConfigUpdater;
 import me.kevinnovak.inventorypages.command.ClearCommand;
+import me.kevinnovak.inventorypages.command.InventoryPagesCommand;
+import me.kevinnovak.inventorypages.enums.DatabaseType;
 import me.kevinnovak.inventorypages.file.MessageFile;
 import me.kevinnovak.inventorypages.file.inventory.PlayerInventoryFile;
 import me.kevinnovak.inventorypages.inventory.PlayerPageInventory;
@@ -10,6 +12,8 @@ import me.kevinnovak.inventorypages.manager.AutoSaveManager;
 import me.kevinnovak.inventorypages.manager.DatabaseManager;
 import me.kevinnovak.inventorypages.manager.DebugManager;
 import me.kevinnovak.inventorypages.server.VersionSupport;
+import me.kevinnovak.inventorypages.storage.PlayerInventoryDataStorage;
+import me.kevinnovak.inventorypages.util.MessageUtil;
 import me.kevinnovak.support.version.cross.CrossVersionSupport;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -19,8 +23,9 @@ import java.io.File;
 import java.io.IOException;
 
 public final class InventoryPages extends JavaPlugin {
-public static InventoryPages plugin;
+    public static InventoryPages plugin;
     public static VersionSupport nms;
+    public static DatabaseType databaseType;
 
     @Override
     public void onLoad() {
@@ -33,7 +38,8 @@ public static InventoryPages plugin;
 
         //
         initFiles();
-        DebugManager.setDebug(getConfig().getBoolean("debug"));
+        DebugManager.setDebug(getConfig().getBoolean("debug.enabled"));
+        initDatabase();
         initInventories();
         initCommands();
         initListeners();
@@ -45,10 +51,24 @@ public static InventoryPages plugin;
         Bukkit.getServer().getLogger().info("[InventoryPages] Setting up inventories.");
         for (Player player : Bukkit.getServer().getOnlinePlayers()) {
             try {
-                DatabaseManager.loadInvFromFileIntoHashMap(player);
-            } catch (IOException e) {
+                DatabaseManager.loadPlayerInventory(player);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public void initDatabase() {
+        databaseType = DatabaseType.valueOf(getConfig().getString("database.type"));
+        try {
+            PlayerInventoryDataStorage.init(databaseType);
+        } catch (Exception exception) {
+            PlayerInventoryDataStorage.init(DatabaseType.YAML);
+            MessageUtil.log("&c--------------------------------------");
+            MessageUtil.log("&eDatabase type &c&l" + getConfig().getString("database.type") + "&e không hợp lệ!");
+            MessageUtil.log("&eVui lòng kiểm tra lại type trong config.yml");
+            MessageUtil.log("&eDatabase sẽ được load mặc định theo type &b&lYAML");
+            MessageUtil.log("&c--------------------------------------");
         }
     }
 
@@ -100,6 +120,7 @@ public static InventoryPages plugin;
     }
 
     public void initCommands() {
+        new InventoryPagesCommand();
         new ClearCommand();
     }
 
@@ -119,7 +140,7 @@ public static InventoryPages plugin;
             if (DatabaseManager.playerInvs.containsKey(playerUUID)) {
                 // update inventories to hashmap and save to file
                 DatabaseManager.updateInvToHashMap(player);
-                DatabaseManager.saveInvFromHashMapToFile(player);
+                DatabaseManager.savePlayerInventory(player);
                 DatabaseManager.clearAndRemoveCrashedPlayer(player);
             }
         }

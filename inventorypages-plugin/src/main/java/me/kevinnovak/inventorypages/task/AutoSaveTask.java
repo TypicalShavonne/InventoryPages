@@ -29,7 +29,7 @@ public class AutoSaveTask implements Runnable {
             return;
         }
 
-        DatabaseManager.updateAndSaveAllInventoriesToFiles();
+        DatabaseManager.updateAndSaveAllInventoriesToDatabase();
         DebugManager.debug("AUTO SAVING", "Đã tự động lưu thành công " + Bukkit.getOnlinePlayers().size() + " dữ liệu.");
     }
 

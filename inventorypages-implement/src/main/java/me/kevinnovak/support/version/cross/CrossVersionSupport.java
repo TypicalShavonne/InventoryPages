@@ -30,7 +30,9 @@ public class CrossVersionSupport extends VersionSupport {
         if (itemStack == null)
             return null;
 
-        return XMaterial.matchXMaterial(itemStack).parseItem();
+        ItemStack xItemStack = XMaterial.matchXMaterial(itemStack).parseItem();
+        xItemStack.setAmount(itemStack.getAmount());
+        return xItemStack;
     }
 
     @Override

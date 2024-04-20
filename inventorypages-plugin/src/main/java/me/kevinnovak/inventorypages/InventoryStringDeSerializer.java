@@ -58,7 +58,7 @@ public class InventoryStringDeSerializer {
             ItemStack[] stacks = new ItemStack[dataInput.readInt()];
 
             for (int i = 0; i < stacks.length; i++) {
-                stacks[i] = (ItemStack) dataInput.readObject();
+                stacks[i] = InventoryPages.nms.getItemStack((ItemStack) dataInput.readObject());
             }
             dataInput.close();
             return stacks;

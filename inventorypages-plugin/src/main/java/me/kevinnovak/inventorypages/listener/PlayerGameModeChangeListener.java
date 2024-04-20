@@ -20,8 +20,8 @@ public class PlayerGameModeChangeListener implements Listener {
         Player player = event.getPlayer();
         String playerUUID = player.getUniqueId().toString();
         if (DatabaseManager.playerInvs.containsKey(playerUUID)) {
-            DatabaseManager.playerInvs.get(playerUUID).saveCurrentPage();
-            DatabaseManager.playerInvs.get(playerUUID).showPage(event.getNewGameMode());
+            DatabaseManager.playerInvs.get(playerUUID).getCustomInventory().saveCurrentPage();
+            DatabaseManager.playerInvs.get(playerUUID).getCustomInventory().showPage(event.getNewGameMode());
         }
     }
 }

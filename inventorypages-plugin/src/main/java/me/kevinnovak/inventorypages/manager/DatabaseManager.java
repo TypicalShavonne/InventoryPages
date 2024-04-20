@@ -1,57 +1,44 @@
 package me.kevinnovak.inventorypages.manager;
 
-import me.kevinnovak.inventorypages.CustomInventory;
 import me.kevinnovak.inventorypages.InventoryPages;
-import me.kevinnovak.inventorypages.InventoryStringDeSerializer;
-import me.kevinnovak.inventorypages.inventory.PlayerPageInventory;
+import me.kevinnovak.inventorypages.storage.PlayerInventoryData;
+import me.kevinnovak.inventorypages.storage.PlayerInventoryDataStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class DatabaseManager {
 
-    public static HashMap<String, CustomInventory> playerInvs = new HashMap<String, CustomInventory>();
+    public static HashMap<String, PlayerInventoryData> playerInvs = new HashMap<>();
     public static File crashedFile = new File(InventoryPages.plugin.getDataFolder() + "/backups/crashed.yml");
     public static FileConfiguration crashedData = YamlConfiguration.loadConfiguration(crashedFile);
 
-
-    public static void loadInvFromFileIntoHashMap(Player player) throws IOException {
+    public static void loadPlayerInventory(Player player) {
         clearAndRemoveCrashedPlayer(player);
 
-        int maxPage = 1;
-        Boolean foundPerm = false;
-        for (int i = 2; i < 101; i++) {
-            if (player.hasPermission("inventorypages.pages." + i)) {
-                foundPerm = true;
-                maxPage = i - 1;
-            }
-        }
+        String playerUUID = player.getUniqueId().toString();
 
-        if (foundPerm) {
-            String playerUUID = player.getUniqueId().toString();
-            CustomInventory inventory = new CustomInventory(InventoryPages.plugin, player, maxPage, PlayerPageInventory.prevItem, PlayerPageInventory.prevPos, PlayerPageInventory.nextItem, PlayerPageInventory.nextPos, PlayerPageInventory.noPageItem);
-            DatabaseManager.playerInvs.put(playerUUID, inventory);
-            addCrashedPlayer(player);
-            DatabaseManager.playerInvs.get(playerUUID).showPage(player.getGameMode());
-            DebugManager.debug("LOADING INV. FROM FILE TO HASHMAP PLAYER (" + player.getName() + ")", "Completed with no issues.");
-        }
+        if (playerInvs.containsKey(playerUUID))
+            return;
+
+        playerInvs.put(playerUUID, PlayerInventoryDataStorage.getPlayerInventoryData(player));
+        addCrashedPlayer(player);
+        playerInvs.get(playerUUID).getCustomInventory().showPage(player.getGameMode());
+        DebugManager.debug("LOADING DATABASE PLAYER (" + player.getName() + ")", "Completed with no issues.");
     }
 
-    public static void updateAndSaveAllInventoriesToFiles() {
+    public static void updateAndSaveAllInventoriesToDatabase() {
         if (!Bukkit.getServer().getOnlinePlayers().isEmpty()) {
             for (Player player : Bukkit.getServer().getOnlinePlayers()) {
                 String playerUUID = player.getUniqueId().toString();
                 if (playerInvs.containsKey(playerUUID)) {
                     updateInvToHashMap(player);
-                    saveInvFromHashMapToFile(player);
+                    savePlayerInventory(player);
                 }
             }
             DebugManager.debug("UPDATING AND SAVING ALL INVENTORIES", "Completed with no issues.");
@@ -72,47 +59,11 @@ public class DatabaseManager {
     }
 
     // ======================================
-    // Save Inventory From HashMap To File
+    // Save Inventory From HashMap To Database
     // ======================================
-    public static void saveInvFromHashMapToFile(Player player) {
-        String playerUUID = player.getUniqueId().toString();
-        if (DatabaseManager.playerInvs.containsKey(playerUUID)) {
-            File playerFile = new File(InventoryPages.plugin.getDataFolder() + "/database/" + playerUUID.substring(0, 1) + "/" + playerUUID + ".yml");
-            FileConfiguration playerData = YamlConfiguration.loadConfiguration(playerFile);
-
-            // save survival items
-            for (Map.Entry<Integer, ArrayList<ItemStack>> pageItemEntry : DatabaseManager.playerInvs.get(playerUUID).getItems().entrySet()) {
-                for (int slotNumber = 0; slotNumber < pageItemEntry.getValue().size(); slotNumber++) {
-                    int pageNumber = pageItemEntry.getKey();
-                    if (pageItemEntry.getValue().get(slotNumber) != null) {
-                        playerData.set("items.main." + pageNumber + "." + slotNumber, InventoryStringDeSerializer.toBase64(InventoryPages.nms.getItemStack(pageItemEntry.getValue().get(slotNumber))));
-                    } else {
-                        playerData.set("items.main." + pageNumber + "." + slotNumber, null);
-                    }
-                }
-            }
-
-            // save creative items
-            if (DatabaseManager.playerInvs.get(playerUUID).hasUsedCreative()) {
-                for (int slotNumber = 0; slotNumber < DatabaseManager.playerInvs.get(playerUUID).getCreativeItems().size(); slotNumber++) {
-                    if (DatabaseManager.playerInvs.get(playerUUID).getCreativeItems().get(slotNumber) != null) {
-                        playerData.set("items.creative.0." + slotNumber, InventoryStringDeSerializer.toBase64(DatabaseManager.playerInvs.get(playerUUID).getCreativeItems().get(slotNumber)));
-                    } else {
-                        playerData.set("items.creative.0." + slotNumber, null);
-                    }
-                }
-            }
-
-            // save current page
-            playerData.set("page", DatabaseManager.playerInvs.get(playerUUID).getPage());
-
-            try {
-                playerData.save(playerFile);
-                DebugManager.debug("SAVING INV. FROM HASHMAP TO FILE PLAYER (" + player.getName() + ")", "Completed with no issues.");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+    public static void savePlayerInventory(Player player) {
+        PlayerInventoryDataStorage.savePlayerInventoryData(playerInvs.get(player.getUniqueId().toString()));
+        DebugManager.debug("SAVING DATABASE PLAYER (" + player.getName() + ")", "Completed with no issues.");
     }
 
     // ======================================
@@ -121,9 +72,8 @@ public class DatabaseManager {
     public static void updateInvToHashMap(Player player) {
         String playerUUID = player.getUniqueId().toString();
         if (DatabaseManager.playerInvs.containsKey(playerUUID)) {
-            DatabaseManager.playerInvs.get(playerUUID).saveCurrentPage();
+            DatabaseManager.playerInvs.get(playerUUID).getCustomInventory().saveCurrentPage();
             DebugManager.debug("UPDATING INV. TO HASHMAP PLAYER (" + player.getName() + ")", "Completed with no issues.");
-
         }
     }
 
@@ -135,7 +85,7 @@ public class DatabaseManager {
         if (DatabaseManager.playerInvs.containsKey(playerUUID)) {
             DatabaseManager.playerInvs.remove(playerUUID);
             clearAndRemoveCrashedPlayer(player);
-            DebugManager.debug("REMOVING INV. TO HASHMAP PLAYER (" + player.getName() + ")", "Completed with no issues.");
+            DebugManager.debug("REMOVING INV. FROM HASHMAP PLAYER (" + player.getName() + ")", "Completed with no issues.");
         }
     }
 

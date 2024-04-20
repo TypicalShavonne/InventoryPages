@@ -44,9 +44,9 @@ public class PlayerDeathListener implements Listener {
             }
 
             if (dropOption == 1) {
-                DatabaseManager.playerInvs.get(playerUUID).dropPage(gm);
+                DatabaseManager.playerInvs.get(playerUUID).getCustomInventory().dropPage(gm);
             } else if (dropOption == 2) {
-                DatabaseManager.playerInvs.get(playerUUID).dropAllPages(gm);
+                DatabaseManager.playerInvs.get(playerUUID).getCustomInventory().dropAllPages(gm);
             }
 
             if (!player.hasPermission("inventorypages.keep.hotbar")) {

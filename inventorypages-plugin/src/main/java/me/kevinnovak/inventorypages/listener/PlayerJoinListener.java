@@ -20,6 +20,6 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void playerJoin(PlayerJoinEvent event) throws InterruptedException, IOException {
         Player player = event.getPlayer();
-        DatabaseManager.loadInvFromFileIntoHashMap(player);
+        DatabaseManager.loadPlayerInventory(player);
     }
 }

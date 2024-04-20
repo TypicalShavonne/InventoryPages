@@ -21,7 +21,7 @@ public class PlayerQuitListener implements Listener {
         String playerUUID = player.getUniqueId().toString();
         if (DatabaseManager.playerInvs.containsKey(playerUUID)) {
             DatabaseManager.updateInvToHashMap(player);
-            DatabaseManager.saveInvFromHashMapToFile(player);
+            DatabaseManager.savePlayerInventory(player);
             DatabaseManager.removeInvFromHashMap(player);
         }
     }

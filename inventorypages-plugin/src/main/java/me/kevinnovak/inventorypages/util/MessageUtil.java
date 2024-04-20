@@ -28,11 +28,8 @@ public class MessageUtil {
     }
 
     public static void sendMessage(CommandSender sender, String message) {
+        message = message.replace("%prefix%" , MessageFile.get().getString("messages.prefix"));
         sender.sendMessage(InventoryPages.nms.addColor(message));
-    }
-
-    public static void sendMessage(CommandSender sender, String message, boolean prefix) {
-        sender.sendMessage(InventoryPages.nms.addColor(MessageFile.get().getString("messages.prefix") + message));
     }
 
     public static void sendMessage(Player player, String message) {
@@ -40,13 +37,22 @@ public class MessageUtil {
         if (player == null | message.equals(""))
             return;
 
-        message = MessageFile.get().getString("messages.prefix") + message;
+        message = message.replace("%prefix%" , MessageFile.get().getString("messages.prefix"));
 
 /*        if (!InventoryPages.PAPISupport())
             player.sendMessage(InventoryPages.nms.addColor(message));
         else
             player.sendMessage(InventoryPages.nms.addColor(PlaceholderAPI.setPlaceholders(player, message)));*/
         player.sendMessage(InventoryPages.nms.addColor(message));
+    }
+
+    // only use for testing plugin
+    public static void devMessage(String message) {
+        log("[DEV] " + message);
+    }
+
+    public static void devMessage(Player player, String message) {
+        player.sendMessage("[DEV] " + message);
     }
 
 }
