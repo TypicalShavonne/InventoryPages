@@ -27,8 +27,7 @@ public class DatabaseManager {
             return;
 
         playerInvs.put(playerUUID, PlayerInventoryDataStorage.getPlayerInventoryData(player));
-        addCrashedPlayer(player);
-        playerInvs.get(playerUUID).getCustomInventory().showPage(player.getGameMode());
+        playerInvs.get(playerUUID).showPage(player.getGameMode());
         DebugManager.debug("LOADING DATABASE PLAYER (" + player.getName() + ")", "Completed with no issues.");
     }
 
@@ -72,7 +71,7 @@ public class DatabaseManager {
     public static void updateInvToHashMap(Player player) {
         String playerUUID = player.getUniqueId().toString();
         if (DatabaseManager.playerInvs.containsKey(playerUUID)) {
-            DatabaseManager.playerInvs.get(playerUUID).getCustomInventory().saveCurrentPage();
+            DatabaseManager.playerInvs.get(playerUUID).saveCurrentPage();
             DebugManager.debug("UPDATING INV. TO HASHMAP PLAYER (" + player.getName() + ")", "Completed with no issues.");
         }
     }

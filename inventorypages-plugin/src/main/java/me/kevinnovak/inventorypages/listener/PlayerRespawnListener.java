@@ -22,7 +22,8 @@ public class PlayerRespawnListener implements Listener {
         String playerUUID = player.getUniqueId().toString();
         if (DatabaseManager.playerInvs.containsKey(playerUUID)) {
             GameMode gm = player.getGameMode();
-            DatabaseManager.playerInvs.get(playerUUID).getCustomInventory().showPage(gm);
+            DatabaseManager.playerInvs.get(playerUUID).saveCurrentPage();
+            DatabaseManager.playerInvs.get(playerUUID).showPage(gm);
         }
     }
 }

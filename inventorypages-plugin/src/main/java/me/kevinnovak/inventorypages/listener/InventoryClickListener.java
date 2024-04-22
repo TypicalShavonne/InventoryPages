@@ -34,10 +34,10 @@ public class InventoryClickListener implements Listener {
                         ItemStack item = event.getCurrentItem();
                         if (isSwitcherItem(item, PlayerPageInventory.prevItem)) {
                             event.setCancelled(true);
-                            DatabaseManager.playerInvs.get(player.getUniqueId().toString()).getCustomInventory().prevPage();
+                            DatabaseManager.playerInvs.get(player.getUniqueId().toString()).prevPage();
                         } else if (isSwitcherItem(item, PlayerPageInventory.nextItem)) {
                             event.setCancelled(true);
-                            DatabaseManager.playerInvs.get(player.getUniqueId().toString()).getCustomInventory().nextPage();
+                            DatabaseManager.playerInvs.get(player.getUniqueId().toString()).nextPage();
                         } else if (isSwitcherItem(item, PlayerPageInventory.noPageItem)) {
                             event.setCancelled(true);
                         }

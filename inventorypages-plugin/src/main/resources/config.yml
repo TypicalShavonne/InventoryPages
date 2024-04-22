@@ -48,8 +48,22 @@ auto-saving:
 database:
   # MYSQL, YAML
   type: YAML
+  # Nếu sử dụng MySQL, vui lòng điền thông tin chính xác
+  # Nếu dữ liệu không thể kết nối, sẽ chuyển sang sử dụng YAML
+  mysql:
+    database:
+      host: localhost
+      port: 3306
+      name: inventorypagesrecoded
+      table: inventorydata
+      user: root
+      password: ''
 
 inventory-settings:
   # Để là 0 nếu không muốn cho người chơi bất kì trang nào
   # Không thể để số thấp hơn 0. Nếu để số thấp hơn 0, sẽ tự động coi là 0
   max-page-default: 0
+  # Nếu tùy chọn này được bật, thì khi người chơi vào máy chủ sẽ hiển thị trang đang mở trước đó
+  # ví dụ lúc thoát game đang ở trang 5 thì khi vào game sẽ hiển thị trang 5
+  # Nếu tắt tùy chọn này, thì trang hiển thị khi người chơi vào máy chủ sẽ luôn luôn là trang đầu
+  use-saved-current-page: true

@@ -23,6 +23,9 @@ public class PlayerQuitListener implements Listener {
             DatabaseManager.updateInvToHashMap(player);
             DatabaseManager.savePlayerInventory(player);
             DatabaseManager.removeInvFromHashMap(player);
+
+            for (int i = 9; i < 36; i++)
+                player.getInventory().setItem(i, null);
         }
     }
 }

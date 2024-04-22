@@ -59,7 +59,7 @@ public final class InventoryPages extends JavaPlugin {
     }
 
     public void initDatabase() {
-        databaseType = DatabaseType.valueOf(getConfig().getString("database.type"));
+        databaseType = DatabaseType.valueOf(getConfig().getString("database.type").toUpperCase());
         try {
             PlayerInventoryDataStorage.init(databaseType);
         } catch (Exception exception) {
@@ -142,6 +142,9 @@ public final class InventoryPages extends JavaPlugin {
                 DatabaseManager.updateInvToHashMap(player);
                 DatabaseManager.savePlayerInventory(player);
                 DatabaseManager.clearAndRemoveCrashedPlayer(player);
+
+                for (int i = 9; i < 36; i++)
+                    player.getInventory().setItem(i, null);
             }
         }
         Bukkit.getServer().getLogger().info("[InventoryPages] Plugin disabled.");

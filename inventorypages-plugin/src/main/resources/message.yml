@@ -49,5 +49,5 @@ messages:
         - '&#03fc77/inventorypagesrecoded removemaxpage <player> <amount>'
       reload: '%prefix%&aReloaded InventoryPagesRecoded'
       set-max-page: '%prefix%&fĐã set số trang tối đa của &e%player% &fthành &e%number%'
-      add-max-page: '%prefix%&fĐã thêm số trang tối đa của &e%player% &fthành &e%number%'
-      remove-max-page: '%prefix%&fĐã trừ số trang tối đa của &e%player% &fthành &e%number%'
+      add-max-page: '%prefix%&fĐã thêm &e%number% trang tối đa cho &e%player%'
+      remove-max-page: '%prefix%&fĐã trừ &e%number% trang tối đa của &e%player%'
