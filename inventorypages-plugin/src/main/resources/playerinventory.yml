@@ -1,15 +1,15 @@
 #
-#  ___                                  _                            ____
-# |_ _|  _ __   __   __   ___   _ __   | |_    ___    _ __   _   _  |  _ \    __ _    __ _    ___   ___
-#  | |  | '_ \  \ \ / /  / _ \ | '_ \  | __|  / _ \  | '__| | | | | | |_) |  / _` |  / _` |  / _ \ / __|
-#  | |  | | | |  \ V /  |  __/ | | | | | |_  | (_) | | |    | |_| | |  __/  | (_| | | (_| | |  __/ \__ \
-# |___| |_| |_|   \_/    \___| |_| |_|  \__|  \___/  |_|     \__, | |_|      \__,_|  \__, |  \___| |___/
-#                                                            |___/                   |___/
-#  ____                              _              _
-# |  _ \    ___    ___    ___     __| |   ___    __| |
-# | |_) |  / _ \  / __|  / _ \   / _` |  / _ \  / _` |
-# |  _ <  |  __/ | (__  | (_) | | (_| | |  __/ | (_| |
-# |_| \_\  \___|  \___|  \___/   \__,_|  \___|  \__,_|
+#      _
+#     (_)_ ____   __  _ __   __ _  __ _  ___  ___
+#     | | '_ \ \ / / | '_ \ / _` |/ _` |/ _ \/ __|
+#     | | | | \ V /  | |_) | (_| | (_| |  __/\__ \
+#     |_|_| |_|\_(_) | .__/ \__,_|\__, |\___||___/
+#                    |_|          |___/
+#                             _          _
+#      _ __ ___  ___ ___   __| | ___  __| |
+#     | '__/ _ \/ __/ _ \ / _` |/ _ \/ _` |
+#     | | |  __/ (_| (_) | (_| |  __/ (_| |
+#     |_|  \___|\___\___/ \__,_|\___|\__,_|
 #
 #  Author: KevinNovak, Cortez_Romeo
 #  Download plugin này miễn phí tại: https://minecraftvn.net
@@ -39,6 +39,7 @@
 #
 # ĐỌC KỸ TRƯỚC KHI CHỈNH FILE
 
+# Lưu ý đối với slot, nếu bạn muốn điều chỉnh slot item thì vào config.yml có phần database.<next hoaặc prev>-item-position-default để chỉnh lại vị trí
 items:
   # Trang trước
   prev:
@@ -46,7 +47,7 @@ items:
     value: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmQ2OWUwNmU1ZGFkZmQ4NGU1ZjNkMWMyMTA2M2YyNTUzYjJmYTk0NWVlMWQ0ZDcxNTJmZGM1NDI1YmMxMmE5In19fQ==
     data: 0
     name: '&aTrang trước'
-    slot: 18
+    #slot: không chỉnh slot ở đây, chỉnh ở config.yml (datatabase.prev-item-position-default)
     lore:
       - '&7Trang {CURRENT}/{MAX}'
 
@@ -56,7 +57,7 @@ items:
     value: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTliZjMyOTJlMTI2YTEwNWI1NGViYTcxM2FhMWIxNTJkNTQxYTFkODkzODgyOWM1NjM2NGQxNzhlZDIyYmYifX19
     data: 0
     name: '&aTrang sau'
-    slot: 26
+    #slot: không chỉnh slot ở đây, chỉnh ở config.yml (datatabase.next-item-position-default)
     lore:
       - '&7Trang {CURRENT}/{MAX}'
 

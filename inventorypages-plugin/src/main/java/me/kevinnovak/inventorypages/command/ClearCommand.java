@@ -20,7 +20,7 @@ import java.util.List;
 public class ClearCommand implements CommandExecutor, TabExecutor {
     public ClearCommand() {
         InventoryPages.plugin.getCommand("clear").setExecutor(this);
-        DebugManager.debug("LOADING COMMAND", "Loaded ClearCommand");
+        DebugManager.debug("LOADING COMMAND", "Loaded ClearCommand.");
     }
 
     @Override

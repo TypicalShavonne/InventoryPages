@@ -13,6 +13,7 @@ import me.kevinnovak.inventorypages.manager.DatabaseManager;
 import me.kevinnovak.inventorypages.manager.DebugManager;
 import me.kevinnovak.inventorypages.server.VersionSupport;
 import me.kevinnovak.inventorypages.storage.PlayerInventoryDataStorage;
+import me.kevinnovak.inventorypages.support.PAPISupport;
 import me.kevinnovak.inventorypages.util.MessageUtil;
 import me.kevinnovak.support.version.cross.CrossVersionSupport;
 import org.bukkit.Bukkit;
@@ -26,6 +27,8 @@ public final class InventoryPages extends JavaPlugin {
     public static InventoryPages plugin;
     public static VersionSupport nms;
     public static DatabaseType databaseType;
+    private String version = Bukkit.getServer().getClass().getName().split("\\.")[3];
+    private boolean papiSupport = false;
 
     @Override
     public void onLoad() {
@@ -43,12 +46,33 @@ public final class InventoryPages extends JavaPlugin {
         initInventories();
         initCommands();
         initListeners();
+        initSupport();
 
         AutoSaveManager.startAutoSave(getConfig().getInt("auto-saving.interval"));
+
+        MessageUtil.log("&f--------------------------------");
+        MessageUtil.log("&2 _                                          ");
+        MessageUtil.log("&2(_)_ ____   __  _ __   __ _  __ _  ___  ___ ");
+        MessageUtil.log("&2| | '_ \\ \\ / / | '_ \\ / _` |/ _` |/ _ \\/ __|");
+        MessageUtil.log("&2| | | | \\ V /  | |_) | (_| | (_| |  __/\\__ \\");
+        MessageUtil.log("&2|_|_| |_|\\_(_) | .__/ \\__,_|\\__, |\\___||___/");
+        MessageUtil.log("&2               |_|          |___/           ");
+        MessageUtil.log("&2                        _          _        ");
+        MessageUtil.log("&2 _ __ ___  ___ ___   __| | ___  __| |       ");
+        MessageUtil.log("&2| '__/ _ \\/ __/ _ \\ / _` |/ _ \\/ _` |       ");
+        MessageUtil.log("&2| | |  __/ (_| (_) | (_| |  __/ (_| |       ");
+        MessageUtil.log("&2|_|  \\___|\\___\\___/ \\__,_|\\___|\\__,_|       ");
+        MessageUtil.log("");
+        MessageUtil.log("&fVersion: &b" + getDescription().getVersion());
+        MessageUtil.log("&fAuthor: &bKevinNovak, Cortez_Romeo");
+        MessageUtil.log("&eKhởi chạy plugin trên phiên bản: " + version);
+        MessageUtil.log("");
+        MessageUtil.log("&fSupport:");
+        MessageUtil.log((papiSupport ? "&2[YES] &aPlaceholderAPI" : "&4[NO] &cPlaceholderAPI"));
+        MessageUtil.log("");
+        MessageUtil.log("&f--------------------------------");
         //
 
-        // load all online players into hashmap
-        Bukkit.getServer().getLogger().info("[InventoryPages] Setting up inventories.");
         for (Player player : Bukkit.getServer().getOnlinePlayers()) {
             try {
                 DatabaseManager.loadPlayerInventory(player);
@@ -56,19 +80,22 @@ public final class InventoryPages extends JavaPlugin {
                 e.printStackTrace();
             }
         }
+
+        if (Metrics.isEnable())
+            new Metrics(this, 21649);
     }
 
     public void initDatabase() {
-        databaseType = DatabaseType.valueOf(getConfig().getString("database.type").toUpperCase());
         try {
+            databaseType = DatabaseType.valueOf(getConfig().getString("database.type").toUpperCase());
             PlayerInventoryDataStorage.init(databaseType);
-        } catch (Exception exception) {
-            PlayerInventoryDataStorage.init(DatabaseType.YAML);
+        } catch (IllegalArgumentException exception) {
             MessageUtil.log("&c--------------------------------------");
             MessageUtil.log("&eDatabase type &c&l" + getConfig().getString("database.type") + "&e không hợp lệ!");
             MessageUtil.log("&eVui lòng kiểm tra lại type trong config.yml");
             MessageUtil.log("&eDatabase sẽ được load mặc định theo type &b&lYAML");
             MessageUtil.log("&c--------------------------------------");
+            PlayerInventoryDataStorage.init(DatabaseType.YAML);
         }
     }
 
@@ -86,7 +113,7 @@ public final class InventoryPages extends JavaPlugin {
             e.printStackTrace();
         }
         reloadConfig();
-        DebugManager.debug("LOADING FILE", "Loaded config.yml");
+        DebugManager.debug("LOADING FILE", "Loaded config.yml.");
 
         // message.yml
         String messageFileName = "message.yml";
@@ -99,7 +126,7 @@ public final class InventoryPages extends JavaPlugin {
             e.printStackTrace();
         }
         MessageFile.reload();
-        DebugManager.debug("LOADING FILE", "Loaded message.yml");
+        DebugManager.debug("LOADING FILE", "Loaded message.yml.");
 
         // inventories/playerinventory.yml
         String inventoryFileName = "playerinventory.yml";
@@ -112,7 +139,7 @@ public final class InventoryPages extends JavaPlugin {
             e.printStackTrace();
         }
         PlayerInventoryFile.reload();
-        DebugManager.debug("LOADING FILE", "Loaded playerinventory.yml");
+        DebugManager.debug("LOADING FILE", "Loaded playerinventory.yml.");
     }
 
     public void initInventories() {
@@ -133,6 +160,14 @@ public final class InventoryPages extends JavaPlugin {
         new PlayerRespawnListener();
     }
 
+    public void initSupport() {
+        // papi
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new PAPISupport().register();
+            papiSupport = true;
+        }
+    }
+
     @Override
     public void onDisable() {
         for (Player player : Bukkit.getServer().getOnlinePlayers()) {
@@ -147,7 +182,22 @@ public final class InventoryPages extends JavaPlugin {
                     player.getInventory().setItem(i, null);
             }
         }
-        Bukkit.getServer().getLogger().info("[InventoryPages] Plugin disabled.");
-    }
+        MessageUtil.log("&f--------------------------------");
+        MessageUtil.log("&4 _                                          ");
+        MessageUtil.log("&4(_)_ ____   __  _ __   __ _  __ _  ___  ___ ");
+        MessageUtil.log("&4| | '_ \\ \\ / / | '_ \\ / _` |/ _` |/ _ \\/ __|");
+        MessageUtil.log("&4| | | | \\ V /  | |_) | (_| | (_| |  __/\\__ \\");
+        MessageUtil.log("&4|_|_| |_|\\_(_) | .__/ \\__,_|\\__, |\\___||___/");
+        MessageUtil.log("&4               |_|          |___/           ");
+        MessageUtil.log("&4                        _          _        ");
+        MessageUtil.log("&4 _ __ ___  ___ ___   __| | ___  __| |       ");
+        MessageUtil.log("&4| '__/ _ \\/ __/ _ \\ / _` |/ _ \\/ _` |       ");
+        MessageUtil.log("&4| | |  __/ (_| (_) | (_| |  __/ (_| |       ");
+        MessageUtil.log("&4|_|  \\___|\\___\\___/ \\__,_|\\___|\\__,_|       ");
+        MessageUtil.log("");
+        MessageUtil.log("&fVersion: &b" + getDescription().getVersion());
+        MessageUtil.log("&fAuthor: &bKevinNovak, Cortez_Romeo");
+        MessageUtil.log("");
+        MessageUtil.log("&f--------------------------------");    }
 
 }

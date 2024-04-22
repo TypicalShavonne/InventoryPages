@@ -1,5 +1,5 @@
 name: InventoryPagesRecoded
-version: '${parent.version}'
+version: '${project.version}'
 main: me.kevinnovak.inventorypages.InventoryPages
 api-version: '1.13'
 authors:
@@ -12,6 +12,9 @@ commands:
     aliases:
       - inventorypages
       - inventoryp
+      - tuidopage
+      - tudopage
+      - tuidopages
   clear:
     description: Clear inventory
     aliases:

@@ -1,9 +1,11 @@
 package me.kevinnovak.inventorypages.listener;
 
 import me.kevinnovak.inventorypages.InventoryPages;
+import me.kevinnovak.inventorypages.file.MessageFile;
 import me.kevinnovak.inventorypages.inventory.PlayerPageInventory;
 import me.kevinnovak.inventorypages.manager.DatabaseManager;
 import me.kevinnovak.inventorypages.manager.DebugManager;
+import me.kevinnovak.inventorypages.util.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -19,7 +21,7 @@ import org.bukkit.inventory.ItemStack;
 public class InventoryClickListener implements Listener {
     public InventoryClickListener() {
         Bukkit.getPluginManager().registerEvents(this, InventoryPages.plugin);
-        DebugManager.debug("LOADING EVENTS", "Loaded InventoryClickEvent");
+        DebugManager.debug("LOADING EVENT", "Loaded InventoryClickEvent.");
     }
 
     @EventHandler
@@ -32,13 +34,15 @@ public class InventoryClickListener implements Listener {
                     Player player = (Player) holder;
                     if (hasSwitcherItems(player)) {
                         ItemStack item = event.getCurrentItem();
-                        if (isSwitcherItem(item, PlayerPageInventory.prevItem)) {
+                        int customInvSLot = event.getSlot() - 9;
+                        if (isSwitcherItem(item, PlayerPageInventory.prevItem) || customInvSLot == DatabaseManager.playerInvs.get(player.getUniqueId().toString()).getPrevItemPos()) {
                             event.setCancelled(true);
                             DatabaseManager.playerInvs.get(player.getUniqueId().toString()).prevPage();
-                        } else if (isSwitcherItem(item, PlayerPageInventory.nextItem)) {
+                        } else if (isSwitcherItem(item, PlayerPageInventory.nextItem)  || customInvSLot == DatabaseManager.playerInvs.get(player.getUniqueId().toString()).getNextItemPos()) {
                             event.setCancelled(true);
                             DatabaseManager.playerInvs.get(player.getUniqueId().toString()).nextPage();
                         } else if (isSwitcherItem(item, PlayerPageInventory.noPageItem)) {
+                            MessageUtil.sendMessage(player, MessageFile.get().getString("messages.no-page-message"));
                             event.setCancelled(true);
                         }
                     }

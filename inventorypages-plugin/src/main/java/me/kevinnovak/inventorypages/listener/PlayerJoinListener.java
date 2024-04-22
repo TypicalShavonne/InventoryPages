@@ -14,7 +14,7 @@ import java.io.IOException;
 public class PlayerJoinListener implements Listener {
     public PlayerJoinListener() {
         Bukkit.getPluginManager().registerEvents(this, InventoryPages.plugin);
-        DebugManager.debug("LOADING EVENTS", "Loaded PlayerJoinEvent");
+        DebugManager.debug("LOADING EVENT", "Loaded PlayerJoinEvent.");
     }
 
     @EventHandler

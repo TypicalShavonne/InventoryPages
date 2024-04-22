@@ -22,7 +22,7 @@ import java.util.List;
 public class InventoryPagesCommand implements CommandExecutor, TabExecutor {
     public InventoryPagesCommand() {
         InventoryPages.plugin.getCommand("inventorypagesrecoded").setExecutor(this);
-        DebugManager.debug("LOADING COMMAND", "Loaded InventoryPageRecoded");
+        DebugManager.debug("LOADING COMMAND", "Loaded InventoryPageRecoded.");
     }
 
     @Override

@@ -15,7 +15,7 @@ import org.bukkit.inventory.PlayerInventory;
 public class PlayerDeathListener implements Listener {
     public PlayerDeathListener() {
         Bukkit.getPluginManager().registerEvents(this, InventoryPages.plugin);
-        DebugManager.debug("LOADING EVENTS", "Loaded PlayerDeathEvent");
+        DebugManager.debug("LOADING EVENT", "Loaded PlayerDeathEvent.");
     }
 
     @EventHandler

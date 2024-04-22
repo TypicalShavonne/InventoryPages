@@ -12,7 +12,7 @@ import org.bukkit.event.player.PlayerGameModeChangeEvent;
 public class PlayerGameModeChangeListener implements Listener {
     public PlayerGameModeChangeListener() {
         Bukkit.getPluginManager().registerEvents(this, InventoryPages.plugin);
-        DebugManager.debug("LOADING EVENTS", "Loaded PlayerGameModeChangeEvent");
+        DebugManager.debug("LOADING EVENT", "Loaded PlayerGameModeChangeEvent.");
     }
 
     @EventHandler

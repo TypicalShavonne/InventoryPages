@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 public class PlayerRespawnListener implements Listener {
     public PlayerRespawnListener() {
         Bukkit.getPluginManager().registerEvents(this, InventoryPages.plugin);
-        DebugManager.debug("LOADING EVENTS", "Loaded PlayerRespawnEvent");
+        DebugManager.debug("LOADING EVENT", "Loaded PlayerRespawnEvent.");
     }
 
     @EventHandler

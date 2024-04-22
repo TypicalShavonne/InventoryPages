@@ -46,7 +46,7 @@ public class PlayerInventoryDataYAMLStorage implements PlayerInventoryStorage {
 
         PlayerInventoryData data = new PlayerInventoryData(Bukkit.getPlayer(playerName), playerName, playerUUID, maxPageDefault,null, null, PlayerPageInventory.prevItem, PlayerPageInventory.prevPos, PlayerPageInventory.nextItem, PlayerPageInventory.nextPos, PlayerPageInventory.noPageItem);
 
-        if (!storage.contains("items.main")) {
+        if (storage.getString("name") == null) {
             return data;
         } else {
             int maxPage = storage.getInt("maxPage");
@@ -95,6 +95,11 @@ public class PlayerInventoryDataYAMLStorage implements PlayerInventoryStorage {
 
             if (InventoryPages.plugin.getConfig().getBoolean("inventory-settings.use-saved-current-page"))
                 data.setPage(storage.getInt("currentPage"));
+
+            if (!InventoryPages.plugin.getConfig().getBoolean("inventory-settings.focus-using-default-item-position")) {
+                data.setPrevItemPos(storage.getInt("prevItemPos"));
+                data.setNextItemPos(storage.getInt("nextItemPos"));
+            }
         }
 
         return data;
@@ -116,6 +121,8 @@ public class PlayerInventoryDataYAMLStorage implements PlayerInventoryStorage {
         playerDataCfg.set("uuid", playerInventoryData.getPlayerUUID());
         playerDataCfg.set("maxPage", playerInventoryData.getMaxPage());
         playerDataCfg.set("currentPage", playerInventoryData.getPage());
+        playerDataCfg.set("prevItemPos", playerInventoryData.getPrevItemPos());
+        playerDataCfg.set("nextItemPos", playerInventoryData.getNextItemPos());
 
         // save survival items
         for (Map.Entry<Integer, ArrayList<ItemStack>> pageItemEntry : playerInventoryData.getItems().entrySet()) {

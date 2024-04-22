@@ -29,7 +29,7 @@ public class PlayerInventoryDataMySQLStorage implements PlayerInventoryStorage {
     private static void createTable() {
 
         if (ifTableExist(table)) {
-            DebugManager.debug("MYSQL DATABASE", "Connected to table " + table);
+            DebugManager.debug("LOADING DATABASE", "Connected to table " + table + ".");
         } else {
             try {
                 Statement stmt = connection.createStatement();
@@ -40,10 +40,12 @@ public class PlayerInventoryDataMySQLStorage implements PlayerInventoryStorage {
                         " CREATIVEITEMS TEXT, " +
                         " MAXPAGE VARCHAR(50), " +
                         " PAGE VARCHAR(50), " +
+                        " PREVITEMPOS VARCHAR(50), " +
+                        " NEXTITEMPOS VARCHAR(50), " +
                         " PRIMARY KEY (UUID))";
 
                 stmt.executeUpdate(sql);
-                DebugManager.debug("MYSQL DATABASE", "Created and connected to table " + table);
+                DebugManager.debug("LOADING DATABASE", "Created and connected to table " + table + ".");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -111,6 +113,10 @@ public class PlayerInventoryDataMySQLStorage implements PlayerInventoryStorage {
                     data.setCreativeItems(creativeItemsItemStack);
                 }
 
+                if (!InventoryPages.plugin.getConfig().getBoolean("inventory-settings.focus-using-default-item-position")) {
+                    data.setPrevItemPos(resultSet.getInt("PREVITEMPOS"));
+                    data.setNextItemPos(resultSet.getInt("NEXTITEMPOS"));
+                }
             }
             data.setPlayerName(playerName);
             data.setPlayerUUID(playerUUID);
@@ -139,7 +145,7 @@ public class PlayerInventoryDataMySQLStorage implements PlayerInventoryStorage {
 
     private static void initData(String playerUUID) {
         ArrayList<String> queries = new ArrayList<>();
-        queries.add("INSERT INTO " + table + " (UUID, PLAYERNAME, ITEMS, CREATIVEITEMS, MAXPAGE, PAGE) values('" + playerUUID + "', '', '', '', '', '')");
+        queries.add("INSERT INTO " + table + " (UUID, PLAYERNAME, ITEMS, CREATIVEITEMS, MAXPAGE, PAGE, PREVITEMPOS, NEXTITEMPOS) values('" + playerUUID + "', '', '', '', '', '', '', '')");
         queries.forEach(cmd -> {
             try (PreparedStatement ps = connection.prepareStatement(cmd)) {
                 ps.execute();
@@ -161,12 +167,14 @@ public class PlayerInventoryDataMySQLStorage implements PlayerInventoryStorage {
             initData(playerInventoryData.getPlayerUUID());
 
         String query = "UPDATE " + table + " "
-                + "SET PLAYERNAME = ? "
-                + ", ITEMS = ? "
-                + ", CREATIVEITEMS = ? "
-                + ", MAXPAGE = ? "
-                + ", PAGE = ? "
-                + "WHERE UUID = ?";
+                + "SET PLAYERNAME = ?,"
+                + " ITEMS = ?,"
+                + " CREATIVEITEMS = ?,"
+                + " MAXPAGE = ?,"
+                + " PAGE = ?,"
+                + " PREVITEMPOS = ?,"
+                + " NEXTITEMPOS = ?"
+                + " WHERE UUID = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, playerInventoryData.getPlayerName());
@@ -195,7 +203,10 @@ public class PlayerInventoryDataMySQLStorage implements PlayerInventoryStorage {
 
             ps.setInt(4, playerInventoryData.getMaxPage());
             ps.setInt(5, playerInventoryData.getPage());
-            ps.setString(6, playerInventoryData.getPlayerUUID());
+            ps.setInt(6, playerInventoryData.getPrevItemPos());
+            ps.setInt(7, playerInventoryData.getNextItemPos());
+            ps.setString(8, playerInventoryData.getPlayerUUID());
+
 
             ps.executeUpdate();
         } catch (Exception e) {

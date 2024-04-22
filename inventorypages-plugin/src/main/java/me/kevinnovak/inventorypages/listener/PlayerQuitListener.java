@@ -12,7 +12,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class PlayerQuitListener implements Listener {
     public PlayerQuitListener() {
         Bukkit.getPluginManager().registerEvents(this, InventoryPages.plugin);
-        DebugManager.debug("LOADING EVENTS", "Loaded PlayerQuitEvent");
+        DebugManager.debug("LOADING EVENT", "Loaded PlayerQuitEvent.");
     }
 
     @EventHandler

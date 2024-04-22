@@ -1,5 +1,6 @@
 package me.kevinnovak.inventorypages.inventory;
 
+import me.kevinnovak.inventorypages.InventoryPages;
 import me.kevinnovak.inventorypages.file.inventory.PlayerInventoryFile;
 import me.kevinnovak.inventorypages.manager.DebugManager;
 import me.kevinnovak.inventorypages.util.ItemUtil;
@@ -18,14 +19,14 @@ public class PlayerPageInventory {
                 (short) playerInvCfg.getInt("items.prev.data"),
                 playerInvCfg.getString("items.prev.name"),
                 playerInvCfg.getStringList("items.prev.lore"));
-        prevPos = playerInvCfg.getInt("items.prev.slot");
+        prevPos = InventoryPages.plugin.getConfig().getInt("inventory-settings.prev-item-position-default");
 
         nextItem = ItemUtil.getItem(playerInvCfg.getString("items.next.type"),
                 playerInvCfg.getString("items.next.value"),
                 (short) playerInvCfg.getInt("items.next.data"),
                 playerInvCfg.getString("items.next.name"),
                 playerInvCfg.getStringList("items.next.lore"));
-        nextPos = playerInvCfg.getInt("items.next.slot");
+        nextPos = InventoryPages.plugin.getConfig().getInt("inventory-settings.next-item-position-default");
 
         noPageItem = ItemUtil.getItem(playerInvCfg.getString("items.noPage.type"),
                 playerInvCfg.getString("items.noPage.value"),
