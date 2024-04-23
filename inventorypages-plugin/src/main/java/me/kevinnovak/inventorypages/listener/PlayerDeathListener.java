@@ -23,10 +23,11 @@ public class PlayerDeathListener implements Listener {
         Player player = event.getEntity();
         String playerUUID = player.getUniqueId().toString();
         if (DatabaseManager.playerInvs.containsKey(playerUUID)) {
-            //save items before death
             DatabaseManager.updateInvToHashMap(player);
-
             event.setKeepInventory(true);
+
+            if (InventoryPages.plugin.getConfig().getBoolean("inventory-settings.keep-inventory"))
+                return;
 
             GameMode gm = player.getGameMode();
 
@@ -34,12 +35,12 @@ public class PlayerDeathListener implements Listener {
             int dropOption = 2;
 
             // If you have keep unopened, drop only the current page
-            if (player.hasPermission("inventorypages.keep.unopened")) {
+            if (player.hasPermission("inventorypagesrecoded.keep.unopened")) {
                 dropOption = 1;
             }
 
             // If you have keep all, don't drop anything
-            if (player.hasPermission("inventorypages.keep.all")) {
+            if (player.hasPermission("inventorypagesrecoded.keep.all")) {
                 dropOption = 0;
             }
 
@@ -49,9 +50,10 @@ public class PlayerDeathListener implements Listener {
                 DatabaseManager.playerInvs.get(playerUUID).dropAllPages(gm);
             }
 
-            if (!player.hasPermission("inventorypages.keep.hotbar")) {
+            if (!player.hasPermission("inventorypagesrecoded.keep.hotbar") && dropOption > 0)
                 dropHotbar(player);
-            }
+
+            DatabaseManager.updateInvToHashMap(player);
         }
     }
 

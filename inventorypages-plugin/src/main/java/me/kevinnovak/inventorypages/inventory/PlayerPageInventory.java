@@ -11,7 +11,6 @@ public class PlayerPageInventory {
     public static ItemStack nextItem, prevItem, noPageItem;
     public static Integer prevPos, nextPos;
 
-
     public static void setupItems() {
         FileConfiguration playerInvCfg = PlayerInventoryFile.get();
         prevItem = ItemUtil.getItem(playerInvCfg.getString("items.prev.type"),

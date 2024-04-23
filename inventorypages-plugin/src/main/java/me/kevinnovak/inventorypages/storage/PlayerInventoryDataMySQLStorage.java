@@ -27,7 +27,6 @@ public class PlayerInventoryDataMySQLStorage implements PlayerInventoryStorage {
     }
 
     private static void createTable() {
-
         if (ifTableExist(table)) {
             DebugManager.debug("LOADING DATABASE", "Connected to table " + table + ".");
         } else {
@@ -68,7 +67,6 @@ public class PlayerInventoryDataMySQLStorage implements PlayerInventoryStorage {
     }
 
     public PlayerInventoryData fromMySQL(String playerName, String playerUUID) {
-
         HashMap<Integer, ArrayList<ItemStack>> pageItemHashMap = new HashMap<>();
         int maxPageDefault = InventoryPages.plugin.getConfig().getInt("inventory-settings.max-page-default");
         if (maxPageDefault < 0)

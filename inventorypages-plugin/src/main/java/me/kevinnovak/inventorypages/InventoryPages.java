@@ -28,7 +28,7 @@ public final class InventoryPages extends JavaPlugin {
     public static VersionSupport nms;
     public static DatabaseType databaseType;
     private String version = Bukkit.getServer().getClass().getName().split("\\.")[3];
-    private boolean papiSupport = false;
+    private static boolean papiSupport = false;
 
     @Override
     public void onLoad() {
@@ -38,15 +38,13 @@ public final class InventoryPages extends JavaPlugin {
 
     @Override
     public void onEnable() {
-
-        //
         initFiles();
         DebugManager.setDebug(getConfig().getBoolean("debug.enabled"));
         initDatabase();
         initInventories();
         initCommands();
         initListeners();
-        initSupport();
+        initSupports();
 
         AutoSaveManager.startAutoSave(getConfig().getInt("auto-saving.interval"));
 
@@ -71,7 +69,6 @@ public final class InventoryPages extends JavaPlugin {
         MessageUtil.log((papiSupport ? "&2[YES] &aPlaceholderAPI" : "&4[NO] &cPlaceholderAPI"));
         MessageUtil.log("");
         MessageUtil.log("&f--------------------------------");
-        //
 
         for (Player player : Bukkit.getServer().getOnlinePlayers()) {
             try {
@@ -103,6 +100,10 @@ public final class InventoryPages extends JavaPlugin {
         File inventoryFolder = new File(getDataFolder() + "/inventories");
         if (!inventoryFolder.exists())
             inventoryFolder.mkdirs();
+
+        File backupFolder = new File(getDataFolder() + "/backup");
+        if (!backupFolder.exists())
+            backupFolder.mkdirs();
 
         // config.yml
         saveDefaultConfig();
@@ -157,15 +158,20 @@ public final class InventoryPages extends JavaPlugin {
         new PlayerGameModeChangeListener();
         new PlayerJoinListener();
         new PlayerQuitListener();
+        new EntityPickupListener();
         new PlayerRespawnListener();
     }
 
-    public void initSupport() {
+    public void initSupports() {
         // papi
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new PAPISupport().register();
             papiSupport = true;
         }
+    }
+
+    public static boolean isPapiSupport() {
+        return papiSupport;
     }
 
     @Override
@@ -177,9 +183,6 @@ public final class InventoryPages extends JavaPlugin {
                 DatabaseManager.updateInvToHashMap(player);
                 DatabaseManager.savePlayerInventory(player);
                 DatabaseManager.clearAndRemoveCrashedPlayer(player);
-
-                for (int i = 9; i < 36; i++)
-                    player.getInventory().setItem(i, null);
             }
         }
         MessageUtil.log("&f--------------------------------");
@@ -199,5 +202,4 @@ public final class InventoryPages extends JavaPlugin {
         MessageUtil.log("&fAuthor: &bKevinNovak, Cortez_Romeo");
         MessageUtil.log("");
         MessageUtil.log("&f--------------------------------");    }
-
 }

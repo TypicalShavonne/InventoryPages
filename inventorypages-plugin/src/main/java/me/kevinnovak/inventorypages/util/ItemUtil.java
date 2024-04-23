@@ -12,7 +12,6 @@ import java.util.concurrent.atomic.AtomicReference;
 public class ItemUtil {
 
     public static ItemStack getItem(String type, String value, short itemData, String name, List<String> lore) {
-
         AtomicReference<ItemStack> material = new AtomicReference<>(new ItemStack(Material.BEDROCK));
 
         if (type.equalsIgnoreCase("customhead") || type.equalsIgnoreCase("playerhead"))
@@ -33,7 +32,6 @@ public class ItemUtil {
 
         material.get().setItemMeta(materialMeta);
         return material.get();
-
     }
 
 }

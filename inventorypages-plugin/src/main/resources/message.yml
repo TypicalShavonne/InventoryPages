@@ -30,12 +30,12 @@
 messages:
   prefix: '&#34ebc3[InventoryPagesRecoded]&r '
   no-permission: '%prefix%&cBạn không có quyền để xài lệnh này.'
-  clear: '%prefix%&aXóa túi đồ trang hiện tại thành công &7(Sử dụng /clear all nếu muốn xóa ở tất cả trang).'
-  clear-all: '%prefix%&aXóa túi đồ ở tất cả trang thành công!'
+  clear: '%prefix%&fXóa túi đồ trang hiện tại thành công &7(Sử dụng /clear all nếu muốn xóa ở tất cả trang).'
+  clear-all: '%prefix%&fXóa túi đồ ở tất cả trang thành công!'
   # Khi kho đồ cũ có quá nhiều để có thể fit kho đồ mới, item sẽ drop
   items-dropped: '%prefix%&cQuá nhiều item! Một số item đã bị rớt ra trong quá trình chuyển đổi.'
-  invalid-number: '%prefix%&cSố không hợp lệ'
-  invalid-name: '%prefix%&cNgười chơi &e%player%&c không tồn tại!'
+  invalid-number: '%prefix%&cSố không hợp lệ.'
+  invalid-name: '%prefix%&cNgười chơi &e%player%&c không tồn tại.'
   no-page-message: ''
   commands:
     inventorypagesrecoded:
@@ -45,10 +45,14 @@ messages:
         - '&7Version %version%'
         - ' '
         - '&#03fc77/inventorypagesrecoded reload'
+        - '&#03fc77/inventorypagesrecoded backup'
         - '&#03fc77/inventorypagesrecoded setmaxpage <player> <amount>'
         - '&#03fc77/inventorypagesrecoded addmaxpage <player> <amount>'
         - '&#03fc77/inventorypagesrecoded removemaxpage <player> <amount>'
-      reload: '%prefix%&aReloaded InventoryPagesRecoded'
-      set-max-page: '%prefix%&fĐã set số trang tối đa của &e%player% &fthành &e%number%'
-      add-max-page: '%prefix%&fĐã thêm &e%number% trang tối đa cho &e%player%'
-      remove-max-page: '%prefix%&fĐã trừ &e%number% trang tối đa của &e%player%'
+      reload: '%prefix%&fReloaded InventoryPagesRecoded.'
+      backup:
+        start: '%prefix%&fBắt đầu quá trình backup dữ liệu...'
+        success: '%prefix%&fBackup &e%number%&f dữ liệu thành công!'
+      set-max-page: '%prefix%&fĐã set số trang tối đa của &e%player% &fthành &e%number%&f.'
+      add-max-page: '%prefix%&fĐã thêm &e%number% trang tối đa cho &e%player%&f.'
+      remove-max-page: '%prefix%&fĐã trừ &e%number% trang tối đa của &e%player%&f.'

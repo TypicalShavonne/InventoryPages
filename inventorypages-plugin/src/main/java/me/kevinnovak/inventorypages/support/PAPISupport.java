@@ -24,7 +24,6 @@ public class PAPISupport extends PlaceholderExpansion {
 
     @Override
     public String onPlaceholderRequest(Player player, String s) {
-
         if (s == null)
             return null;
 

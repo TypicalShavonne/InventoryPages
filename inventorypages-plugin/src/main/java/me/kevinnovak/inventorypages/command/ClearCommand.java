@@ -25,11 +25,10 @@ public class ClearCommand implements CommandExecutor, TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
         if (sender instanceof Player) {
             Player player = (Player) sender;
 
-            if (!player.hasPermission("inventorypages.clear")) {
+            if (!player.hasPermission("inventorypagesrecoded.clear")) {
                 MessageUtil.sendMessage(player, MessageFile.get().getString("messages.no-permission"));
                 return false;
             }
@@ -65,7 +64,7 @@ public class ClearCommand implements CommandExecutor, TabExecutor {
         List<String> commands = new ArrayList<>();
 
         if (args.length == 1) {
-            if (sender.hasPermission("inventorypages.clear")) {
+            if (sender.hasPermission("inventorypagesrecoded.clear")) {
                 commands.add("all");
             }
             StringUtil.copyPartialMatches(args[0], commands, completions);

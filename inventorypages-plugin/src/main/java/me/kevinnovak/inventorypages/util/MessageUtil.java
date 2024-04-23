@@ -1,5 +1,6 @@
 package me.kevinnovak.inventorypages.util;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import me.kevinnovak.inventorypages.InventoryPages;
 import me.kevinnovak.inventorypages.file.MessageFile;
 import org.bukkit.Bukkit;
@@ -14,7 +15,6 @@ public class MessageUtil {
     }
 
     public static void sendBroadCast(String message) {
-
         if (message.equals(""))
             return;
 
@@ -33,17 +33,15 @@ public class MessageUtil {
     }
 
     public static void sendMessage(Player player, String message) {
-
         if (player == null | message.equals(""))
             return;
 
         message = message.replace("%prefix%" , MessageFile.get().getString("messages.prefix"));
 
-/*        if (!InventoryPages.PAPISupport())
+        if (!InventoryPages.isPapiSupport())
             player.sendMessage(InventoryPages.nms.addColor(message));
         else
-            player.sendMessage(InventoryPages.nms.addColor(PlaceholderAPI.setPlaceholders(player, message)));*/
-        player.sendMessage(InventoryPages.nms.addColor(message));
+            player.sendMessage(InventoryPages.nms.addColor(PlaceholderAPI.setPlaceholders(player, message)));
     }
 
     // only use for testing plugin

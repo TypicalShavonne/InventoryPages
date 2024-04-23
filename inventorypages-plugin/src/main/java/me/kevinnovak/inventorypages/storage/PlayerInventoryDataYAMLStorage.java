@@ -20,7 +20,6 @@ import java.util.Map;
 public class PlayerInventoryDataYAMLStorage implements PlayerInventoryStorage {
 
     private File getFile(String playerUUID) {
-
         String path = InventoryPages.plugin.getDataFolder() + "/database/" + playerUUID.substring(0, 1) + "/";
         if (!new File(path).exists())
             new File(path).mkdir();

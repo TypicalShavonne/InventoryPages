@@ -15,7 +15,7 @@ import java.util.HashMap;
 public class DatabaseManager {
 
     public static HashMap<String, PlayerInventoryData> playerInvs = new HashMap<>();
-    public static File crashedFile = new File(InventoryPages.plugin.getDataFolder() + "/backups/crashed.yml");
+    public static File crashedFile = new File(InventoryPages.plugin.getDataFolder() + "/database/crashed.yml");
     public static FileConfiguration crashedData = YamlConfiguration.loadConfiguration(crashedFile);
 
     public static void loadPlayerInventory(Player player) {
@@ -27,6 +27,7 @@ public class DatabaseManager {
             return;
 
         playerInvs.put(playerUUID, PlayerInventoryDataStorage.getPlayerInventoryData(player));
+        addCrashedPlayer(player);
         playerInvs.get(playerUUID).showPage(player.getGameMode());
         DebugManager.debug("LOADING DATABASE PLAYER (" + player.getName() + ")", "Completed with no issues.");
     }
@@ -117,10 +118,7 @@ public class DatabaseManager {
     // Has Crashed
     // ======================================
     public static Boolean hasCrashed(Player player) {
-        if (crashedData.contains("crashed." + player.getUniqueId().toString())) {
-            return true;
-        }
-        return false;
+        return crashedData.contains("crashed." + player.getUniqueId().toString());
     }
 
     // ======================================

@@ -8,7 +8,6 @@ public class AutoSaveManager {
     private static AutoSaveTask autoSaveTask;
 
     public static void startAutoSave(int time) {
-
         if (InventoryPages.plugin.getConfig().getBoolean("auto-saving.enabled") && autoSaveStatus && autoSaveTask != null)
             return;
 
@@ -18,7 +17,6 @@ public class AutoSaveManager {
     }
 
     public static void stopAutoSave() {
-
         if (!autoSaveStatus && autoSaveTask == null)
             return;
 
@@ -28,7 +26,6 @@ public class AutoSaveManager {
     }
 
     public static void reloadTimeAutoSave() {
-
         if (!getAutoSaveStatus())
             return;
 

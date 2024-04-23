@@ -18,7 +18,6 @@ public class DebugManager {
     }
 
     public static void debug(String prefix, String message) {
-
         if (!debug)
             return;
 

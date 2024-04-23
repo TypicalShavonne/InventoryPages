@@ -26,7 +26,7 @@
 #          Ví dụ: (value: 95 | data: 1) [https://minecraft-ids.grahamedgecombe.com/]
 #      > Theo các phiên bản lớn hơn 1.12.2, bạn có thể điền thẳng tên item đó (Phần 'data:' sẽ không còn cần thiết)
 #          Ví dụ: (value: BOOK) [https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html]
-#    + playerhead: dành cho item "bet-player:" để hiện thị đầu người hơi
+#    + playerhead: Hiển thị đầu người hơi
 #    + customhead: Đọc phần ở dưới
 #      + Cách sử dụng custom-head:
 #          Bước 1: Truy cập vào một custom-head mà bạn cần ở web có link https://minecraft-heads.com/custom-heads/
@@ -41,7 +41,6 @@
 
 # Lưu ý đối với slot, nếu bạn muốn điều chỉnh slot item thì vào config.yml có phần database.<next hoaặc prev>-item-position-default để chỉnh lại vị trí
 items:
-  # Trang trước
   prev:
     type: customhead
     value: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmQ2OWUwNmU1ZGFkZmQ4NGU1ZjNkMWMyMTA2M2YyNTUzYjJmYTk0NWVlMWQ0ZDcxNTJmZGM1NDI1YmMxMmE5In19fQ==
@@ -50,8 +49,6 @@ items:
     #slot: không chỉnh slot ở đây, chỉnh ở config.yml (datatabase.prev-item-position-default)
     lore:
       - '&7Trang {CURRENT}/{MAX}'
-
-  # Trang sau
   next:
     type: customhead
     value: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTliZjMyOTJlMTI2YTEwNWI1NGViYTcxM2FhMWIxNTJkNTQxYTFkODkzODgyOWM1NjM2NGQxNzhlZDIyYmYifX19
@@ -60,8 +57,6 @@ items:
     #slot: không chỉnh slot ở đây, chỉnh ở config.yml (datatabase.next-item-position-default)
     lore:
       - '&7Trang {CURRENT}/{MAX}'
-
-  # Không có trang
   noPage:
     type: customhead
     value: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWRiNDUwZDg3MGU0YmY5Yjk3MjZlYWYzYTUwNjU1YmMyMjQ3NDk0MjgyYTZjMjdkMTE5OWNmMTQ4NmFmNTMwOCJ9fX0=

@@ -18,22 +18,6 @@
 # --- discord: Cortez_Romeo
 # --- facebook: https://www.facebook.com/thuong.trinh.nguyen.321/
 
-# Dùng chủ yếu cho việc sửa lỗi, khi bật sẽ hiện log những hành động đã được thực thi trên console
-debug:
-  enabled: false
-  prefix: '&e[InventoryPagesRecoded Debug] '
-
-# Dùng để thống kê số lượng người chơi sử dụng plugin này
-# Không ảnh hưởng đến hiệu năng máy chủ
-bStats:
-  enabled: true
-
-# Tự động lưu
-auto-saving:
-  enabled: true
-  # Bao lâu thì lưu một lần, tính theo giây
-  interval: 900
-
 # Kiểu dữ liệu để hệ thống dựa vào đó mà quản lý
 # Hiện tại mình chỉ làm 2 kiểu dữ liệu, bao gồm:
 #   * MYSQL (BETA)
@@ -59,6 +43,18 @@ database:
       user: root
       password: ''
 
+# Dùng chủ yếu cho việc sửa lỗi, khi bật sẽ hiện log những hành động đã được thực thi trên console
+debug:
+  enabled: false
+  prefix: '&e[InventoryPagesRecoded Debug] '
+
+# Tự động lưu
+auto-saving:
+  enabled: true
+  # Bao lâu thì lưu một lần, tính theo giây
+  interval: 900
+
+# Những thiết lập mặc định cho túi đồ, bao gồm cả việc quản lý dữ liệu và các thông số
 inventory-settings:
   # Để là 0 nếu không muốn cho người chơi bất kì trang nào
   # Không thể để số thấp hơn 0. Nếu để số thấp hơn 0, sẽ tự động coi là 0
@@ -77,3 +73,14 @@ inventory-settings:
   # ví dụ lúc thoát game đang ở trang 5 thì khi vào game sẽ hiển thị trang 5
   # Nếu tắt tùy chọn này, thì trang hiển thị khi người chơi vào máy chủ sẽ luôn luôn là trang đầu
   use-saved-current-page: true
+  # Nếu tùy chọn này đuược bật thì mặc định sẽ tự động keep tất cả item trong túi dồ
+  # Nếu tắt tùy chọn này, người chơi sẽ cần đến permission để keep inventory
+  # inventorypagesrecoded.keep.unopened - Chỉ keep những đồ ở những túi chưa mở
+  # inventorypagesrecoded.keep.hotbar - Keep những đồ trong hotbar
+  # inventorypagesrecoded.keep.all - Keep tất cả
+  keep-inventory: true
+
+# Dùng để thống kê số lượng người chơi sử dụng plugin này
+# Không ảnh hưởng đến hiệu năng máy chủ
+bStats:
+  enabled: true

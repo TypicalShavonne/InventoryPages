@@ -4,6 +4,7 @@ import me.kevinnovak.inventorypages.InventoryPages;
 import me.kevinnovak.inventorypages.file.MessageFile;
 import me.kevinnovak.inventorypages.file.inventory.PlayerInventoryFile;
 import me.kevinnovak.inventorypages.manager.AutoSaveManager;
+import me.kevinnovak.inventorypages.manager.BackupManager;
 import me.kevinnovak.inventorypages.manager.DatabaseManager;
 import me.kevinnovak.inventorypages.manager.DebugManager;
 import me.kevinnovak.inventorypages.util.MessageUtil;
@@ -27,9 +28,8 @@ public class InventoryPagesCommand implements CommandExecutor, TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
         if (sender instanceof Player) {
-            if (!sender.hasPermission("inventorypages.admin")) {
+            if (!sender.hasPermission("inventorypagesrecoded.admin")) {
                 MessageUtil.sendMessage(sender, MessageFile.get().getString("messages.no-permission"));
                 return false;
             }
@@ -49,6 +49,15 @@ public class InventoryPagesCommand implements CommandExecutor, TabExecutor {
                 AutoSaveManager.reloadTimeAutoSave();
                 DebugManager.debug("RELOADING PLUGIN", "Reloaded plugin");
                 MessageUtil.sendMessage(sender, MessageFile.get().getString("messages.commands.inventorypagesrecoded.reload"));
+                return false;
+            }
+            if (args[0].equalsIgnoreCase("backup")) {
+                MessageUtil.sendMessage(sender, MessageFile.get().getString("messages.commands.inventorypagesrecoded.backup.start"));
+                Bukkit.getScheduler().runTaskAsynchronously(InventoryPages.plugin, () -> {
+                    BackupManager backupManager = new BackupManager();
+                    backupManager.backupAll();
+                    MessageUtil.sendMessage(sender, MessageFile.get().getString("messages.commands.inventorypagesrecoded.backup.success").replace("%number%", String.valueOf(backupManager.getTotalDatabase())));
+                });
                 return false;
             }
         }
@@ -108,22 +117,23 @@ public class InventoryPagesCommand implements CommandExecutor, TabExecutor {
         List<String> completions = new ArrayList<>();
         List<String> commands = new ArrayList<>();
 
-        if (args.length == 1) {
-            if (sender.hasPermission("inventorypages.admin")) {
-                commands.add("reload");
-                commands.add("setmaxpage");
-                commands.add("addmaxpage");
-                commands.add("removemaxpage");
+        if (sender.hasPermission("inventorypagesrecoded.admin")) {
+            if (args.length == 1) {
+                commands.add(0, "reload");
+                commands.add(1, "setmaxpage");
+                commands.add(2, "addmaxpage");
+                commands.add(3, "removemaxpage");
+                commands.add(4, "backup");
+                StringUtil.copyPartialMatches(args[0], commands, completions);
+            } else if (args.length == 2) {
+                if (args[0].equalsIgnoreCase("setmaxpage") || args[0].equalsIgnoreCase("addmaxpage") || args[0].equalsIgnoreCase("removemaxpage")) {
+                    if (!Bukkit.getOnlinePlayers().isEmpty())
+                        for (Player player : Bukkit.getOnlinePlayers()) {
+                            commands.add(player.getName());
+                        }
+                }
+                StringUtil.copyPartialMatches(args[1], commands, completions);
             }
-            StringUtil.copyPartialMatches(args[0], commands, completions);
-        } else if (args.length == 2) {
-            if (args[0].equalsIgnoreCase("setmaxpage") || args[0].equalsIgnoreCase("addmaxpage") || args[0].equalsIgnoreCase("removemaxpage")) {
-                if (!Bukkit.getOnlinePlayers().isEmpty())
-                    for (Player player : Bukkit.getOnlinePlayers()) {
-                        commands.add(player.getName());
-                    }
-            }
-            StringUtil.copyPartialMatches(args[1], commands, completions);
         }
         Collections.sort(completions);
         return completions;
