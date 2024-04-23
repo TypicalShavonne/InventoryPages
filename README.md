@@ -5,6 +5,19 @@ Forked from a project made by KevinNovak, InventoryPagesRecoded has been added m
 # Description
 As simple as its name suggests, this plugin gives players on the server additional inventory pages, as well as the ability to customize their inventory pages.
 
+# What's new?
+- Supporting multiple versions from 1.12.x to 1.20.x
+- Fixed bugs from the original version
+- Easier to manage config, message, and inventories, they are now separated
+- Automatically updating files if there is a new update. 
+- Adding more config and inventory options
+- Supporting MySQL database
+- Supporting PlaceholderAPI
+- Adding debug
+- Adding backup
+- Bringing "max page" to the database instead of using permission
+- Supporting Hex Color
+
 # System requirements
 This software runs on [Spigot](https://www.spigotmc.org/) and NMS.
 Spigot forks without compiled NMS code are not supported.
@@ -17,18 +30,19 @@ You might need these plugins to utilize my plugin resources totally.
 	-   **%inventorypagesrecoded_page%** - Get the number of players' current showing page
 	-   **%inventorypagesrecoded_maxpage%** - Get the player's max page number
 
-# What's new?
-- Supporting multiple versions from 1.12.x to 1.20.x
-- Fixed bugs from the original version
-- Easier to manage config, message, and inventories, they are now seperated
-- Automatically updating files if there is a new update. 
-- Adding more config and inventory options
-- Supporting MySQL database
-- Supporting PlaceholderAPI
-- Adding debug
-- Adding backup
-- Bringing "max page" to the database instead of using permission
-- Supporting Hex Color
+ # Command
+ - **/inventorypagessrecoded** - Admin command
+ - **/clear** - Clear all the items in the current showing page
+ - **/clear all** - Clear all the items in all pages
+
+# Permission
+- **inventorypagesrecoded.admin** - Can use the command /inventorypagesrecoded
+- **inventorypagesrecoded.clear** - Can use the command /clear
+- **inventorypagesrecoded.clear.all** - Can use the sub-command /clear all
+	These permissions below will not work if **inventory-settings.keep-inventory** is true in config.yml
+- **inventorypagesrecoded.keep.unopened** - When the player dies, keep unopened pages, and drop items in the current opening page
+- **inventorypagesrecoded.keep.hotbar** - When the player dies, Keep all items in the hotbar	
+- **inventorypagesrecoded.keep.all** - Keep all items when player die
 
 # Contact
 
