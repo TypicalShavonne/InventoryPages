@@ -39,7 +39,8 @@ You might need these plugins to utilize my plugin resources totally.
 - **inventorypagesrecoded.admin** - Can use the command /inventorypagesrecoded
 - **inventorypagesrecoded.clear** - Can use the command /clear
 - **inventorypagesrecoded.clear.all** - Can use the sub-command /clear all
-	These permissions below will not work if **inventory-settings.keep-inventory** is true in config.yml
+
+These permissions below will not work if **inventory-settings.keep-inventory** is true in config.yml
 - **inventorypagesrecoded.keep.unopened** - When the player dies, keep unopened pages, and drop items in the current opening page
 - **inventorypagesrecoded.keep.hotbar** - When the player dies, Keep all items in the hotbar	
 - **inventorypagesrecoded.keep.all** - Keep all items when player die
