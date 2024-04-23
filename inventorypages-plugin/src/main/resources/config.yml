@@ -59,7 +59,7 @@ inventory-settings:
   # Để là 0 nếu không muốn cho người chơi bất kì trang nào
   # Không thể để số thấp hơn 0. Nếu để số thấp hơn 0, sẽ tự động coi là 0
   # LƯU Ý: Tùy chỉnh này sẽ được set vào thẳng data người chơi khi người chơi này chưa có dữ liệu trước đó
-  max-page-default: 0
+  max-page-default: 1
   # Vị trí item "Trang trước" mặc định
   # LƯU Ý: Tùy chỉnh này sẽ được set vào thẳng data người chơi khi người chơi này chưa có dữ liệu trước đó
   prev-item-position-default: 18

@@ -2,6 +2,8 @@ name: InventoryPagesRecoded
 version: '${project.version}'
 main: me.kevinnovak.inventorypages.InventoryPages
 api-version: '1.13'
+softdepend:
+  - PlaceholderAPI
 authors:
   - KevinNovak
   - Cortez_Romeo
