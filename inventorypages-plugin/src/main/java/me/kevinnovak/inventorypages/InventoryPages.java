@@ -78,7 +78,7 @@ public final class InventoryPages extends JavaPlugin {
             }
         }
 
-        if (Metrics.isEnable())
+        if (Metrics.isEnabled())
             new Metrics(this, 21649);
     }
 

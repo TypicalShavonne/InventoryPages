@@ -100,8 +100,8 @@ public class Metrics {
                         logResponseStatusText);
     }
 
-    public static boolean isEnable() {
-        return InventoryPages.plugin.getConfig().getBoolean("bStats.enable");
+    public static boolean isEnabled() {
+        return InventoryPages.plugin.getConfig().getBoolean("bStats.enabled");
     }
 
     /** Shuts down the underlying scheduler service. */
