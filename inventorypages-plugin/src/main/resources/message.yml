@@ -28,7 +28,7 @@
 # ĐỌC KỸ TRƯỚC KHI CHỈNH FILE
 
 messages:
-  prefix: '&#34ebc3[InventoryPagesRecoded]&r '
+  prefix: '&#FBFB14[InventoryPagesRecoded]&r '
   no-permission: '%prefix%&cBạn không có quyền để xài lệnh này.'
   clear: '%prefix%&fXóa túi đồ trang hiện tại thành công &7(Sử dụng /clear all nếu muốn xóa ở tất cả trang).'
   clear-all: '%prefix%&fXóa túi đồ ở tất cả trang thành công!'
@@ -41,14 +41,14 @@ messages:
     inventorypagesrecoded:
       messages:
         - ' '
-        - '&#34ebc3InventoryPagesRecoded'
+        - '&#FBFB14InventoryPagesRecoded'
         - '&7Version %version%'
         - ' '
-        - '&#03fc77/inventorypagesrecoded reload &7- &fTải lại config, inventory, message'
-        - '&#03fc77/inventorypagesrecoded backup &7- &fBackup lại tất cả dữ liệu vào folder backup'
-        - '&#03fc77/inventorypagesrecoded setmaxpage <player> <amount> &7- &fSet trang tối đa'
-        - '&#03fc77/inventorypagesrecoded addmaxpage <player> <amount> &7- &fThêm trang tối đa'
-        - '&#03fc77/inventorypagesrecoded removemaxpage <player> <amount> &7- &fTrừ trang tối đa'
+        - '&#FBFB14/inventorypagesrecoded reload &7- &fTải lại config, inventory, message'
+        - '&#FBFB14/inventorypagesrecoded backup &7- &fBackup lại tất cả dữ liệu vào folder backup'
+        - '&#FBFB14/inventorypagesrecoded setmaxpage &6<player> <amount> &7- &fSet trang tối đa'
+        - '&#FBFB14/inventorypagesrecoded addmaxpage &6<player> <amount> &7- &fThêm trang tối đa'
+        - '&#FBFB14/inventorypagesrecoded removemaxpage &6<player> <amount> &7- &fTrừ trang tối đa'
         - ' '
         - ' &6<>&7: Bắt buộc phải nhập &7| &e()&7: Tùy chỉnh'
       reload: '%prefix%&fReloaded InventoryPagesRecoded.'
